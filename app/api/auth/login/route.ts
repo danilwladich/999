@@ -29,9 +29,15 @@ export async function POST(req: Request) {
 		const isRecaptchaCorrect = verifyCaptcha(recaptchaToken);
 
 		if (!isRecaptchaCorrect) {
-			return new NextResponse("Antibot system not passed", {
-				status: 400,
-			});
+			return new NextResponse(
+				JSON.stringify({
+					field: "recaptchaToken",
+					message: "Antibot system not passed",
+				}),
+				{
+					status: 400,
+				}
+			);
 		}
 
 		const user = await db.user.findFirst({
@@ -41,22 +47,34 @@ export async function POST(req: Request) {
 		});
 
 		if (!user) {
-			return new NextResponse("Incorrect email or password", {
-				status: 400,
-			});
+			return new NextResponse(
+				JSON.stringify({
+					field: "email",
+					message: "User with this email doenst exist",
+				}),
+				{
+					status: 400,
+				}
+			);
 		}
 
 		const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
 		if (!isPasswordCorrect) {
-			return new NextResponse("Incorrect email or password", {
-				status: 400,
-			});
+			return new NextResponse(
+				JSON.stringify({
+					field: "password",
+					message: "Incorrect password",
+				}),
+				{
+					status: 400,
+				}
+			);
 		}
 
 		const jwtSecret = process.env.JWT_SECRET || "jwt_secret";
 
-		const jwtToken = jwt.sign(user, jwtSecret, {
+		const jwtToken = jwt.sign({ ...user, password: undefined }, jwtSecret, {
 			expiresIn: COOKIE_MAX_AGE,
 		});
 
@@ -74,6 +92,12 @@ export async function POST(req: Request) {
 		});
 	} catch (error) {
 		console.log("[LOGIN_POST]", error);
-		return new NextResponse("Internal Error", { status: 500 });
+		return new NextResponse(
+			JSON.stringify({
+				field: "email",
+				message: "Internal Error",
+			}),
+			{ status: 500 }
+		);
 	}
 }

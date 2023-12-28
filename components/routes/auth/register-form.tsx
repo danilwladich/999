@@ -1,6 +1,6 @@
 "use client";
 
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -57,12 +57,29 @@ export default function Register() {
 
 			recaptchaRef.current?.reset();
 
-			if (!error.response) {
+			const res = error.response as AxiosResponse<
+				{
+					field: keyof z.infer<typeof formSchema> | "internal";
+					message: string;
+				},
+				any
+			>;
+
+			if (!res) {
 				alert(error.message);
 				return;
 			}
 
-			setSubmitError(error.response!.data as string);
+			// Recaptcha or internal server error handler
+			if (
+				res.data.field === "recaptchaToken" ||
+				res.data.field === "internal"
+			) {
+				setSubmitError(res.data.message);
+				return;
+			}
+
+			form.setError(res.data.field, { message: res.data.message });
 		}
 	}
 
