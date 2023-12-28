@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import * as z from "zod";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -41,7 +41,7 @@ export const registerSchema = z
 
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
 
-export async function POST(req: Request, res: Response) {
+export async function POST(req: NextRequest) {
 	try {
 		const body = registerSchema.safeParse(await req.json());
 
