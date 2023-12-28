@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 	description: "the best marketplace",
 };
 
-export default async function RootLayout({
+export default function RootLayout({
 	children,
 }: {
 	children: React.ReactNode;
