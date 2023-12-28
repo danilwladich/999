@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { authValidation } from "@/lib/auth-validation";
 
-export function GET(req: NextRequest) {
-	const authUser = authValidation(req);
+export async function GET(req: NextRequest) {
+	const authUser = await authValidation(req);
 
 	if (!authUser) {
 		return new NextResponse("Unauthorized", { status: 401 });
@@ -10,4 +10,3 @@ export function GET(req: NextRequest) {
 
 	return new NextResponse(JSON.stringify(authUser), { status: 200 });
 }
-

@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import { jwtVerify } from "jose";
 import type { NextRequest } from "next/server";
 import type { User } from "@prisma/client";
 
@@ -6,20 +6,28 @@ type UserWithoutPasswort = Omit<User, "password">;
 
 type AuthValidationReturn = false | UserWithoutPasswort;
 
-export function authValidation(req: NextRequest): AuthValidationReturn {
-	const jwtToken = req.cookies.get("jwtToken");
-
-	if (!jwtToken) {
-		return false;
-	}
-
-	const jwtSecret = process.env.JWT_SECRET || "jwt_secret";
-
+export async function authValidation(
+	req: NextRequest
+): Promise<AuthValidationReturn> {
 	try {
-		const user = jwt.verify(jwtToken.value, jwtSecret) as UserWithoutPasswort;
+		const jwtToken = req.cookies.get("jwtToken")?.value;
+
+		if (!jwtToken) {
+			return false;
+		}
+
+		const jwtSecret = process.env.JWT_SECRET || "jwt_secret";
+
+		const verified = await jwtVerify(
+			jwtToken,
+			new TextEncoder().encode(jwtSecret)
+		);
+
+		const user = verified.payload as UserWithoutPasswort;
 
 		return user;
 	} catch (e) {
+		console.log(e);
 		return false;
 	}
 }

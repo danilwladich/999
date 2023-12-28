@@ -2,7 +2,8 @@ import { db } from "@/lib/db";
 import { NextResponse, NextRequest } from "next/server";
 import * as z from "zod";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+import { SignJWT } from "jose";
+import { nanoid } from "nanoid";
 import cookie from "cookie";
 import { verifyCaptcha } from "@/lib/server-actions";
 
@@ -74,9 +75,12 @@ export async function POST(req: NextRequest) {
 
 		const jwtSecret = process.env.JWT_SECRET || "jwt_secret";
 
-		const jwtToken = jwt.sign({ ...user, password: undefined }, jwtSecret, {
-			expiresIn: COOKIE_MAX_AGE,
-		});
+		const jwtToken = await new SignJWT({ ...user, password: undefined })
+			.setProtectedHeader({ alg: "HS256" })
+			.setJti(nanoid())
+			.setIssuedAt()
+			.setExpirationTime(COOKIE_MAX_AGE)
+			.sign(new TextEncoder().encode(jwtSecret));
 
 		const serialized = cookie.serialize("jwtToken", jwtToken, {
 			httpOnly: true,
