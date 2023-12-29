@@ -8,7 +8,7 @@ const font = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
 	title: "999 | marketplace",
-	description: "the best marketplace",
+	description: "The best marketplace",
 };
 
 export default function RootLayout({
@@ -20,9 +20,7 @@ export default function RootLayout({
 		<html lang="en">
 			<body className={font.className}>
 				<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-					<AuthProvider>
-						<div className="container">{children}</div>
-					</AuthProvider>
+					<AuthProvider>{children}</AuthProvider>
 				</ThemeProvider>
 			</body>
 		</html>

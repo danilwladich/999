@@ -20,13 +20,13 @@ export async function middleware(req: NextRequest) {
 				return NextResponse.next();
 			}
 
-			const fromUrl = req.nextUrl.searchParams.get('from')
-			const redirectUrl = new URL(fromUrl || '/profile', req.url);
+			const fromUrl = req.nextUrl.searchParams.get("from");
+			const redirectUrl = new URL(fromUrl || "/profile", req.url);
 
 			return NextResponse.redirect(redirectUrl);
 		}
 
-		case "/": {
+		case "/profile": {
 			const authUser = await authValidation(req);
 
 			if (authUser) {
@@ -45,5 +45,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-	matcher: ["/", "/auth"],
+	matcher: ["/auth", "/profile"],
 };

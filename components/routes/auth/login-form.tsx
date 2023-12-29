@@ -56,7 +56,7 @@ export default function Login() {
 			});
 
 			const redirectUrl = searchParams.get("from") || "/profile";
-			router.push(redirectUrl);
+			router.replace(redirectUrl);
 		} catch (e: unknown) {
 			const error = e as AxiosError;
 

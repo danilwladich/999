@@ -3,11 +3,11 @@
 import axios, { AxiosError } from "axios";
 import { useEffect, useState, createContext } from "react";
 import { AppLoader } from "@/components/ui/app-loader";
-import type { User } from '@prisma/client'
+import type { User } from "@prisma/client";
 
-type UserType = User | {}
+type UserType = User | null;
 
-export const AuthContext = createContext<UserType>({});
+export const AuthContext = createContext<UserType>(null);
 
 export function AuthProvider({
 	children,
@@ -17,7 +17,7 @@ export function AuthProvider({
 }) {
 	const [isLoading, setIsLoading] = useState(true);
 
-	const [user, setUser] = useState<UserType>({});
+	const [user, setUser] = useState<UserType>(null);
 
 	useEffect(() => {
 		async function authMe() {
