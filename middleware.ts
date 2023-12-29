@@ -1,31 +1,49 @@
-import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import jwt from "jsonwebtoken";
+import { NextRequest, NextResponse } from "next/server";
+import { authValidation } from "@/lib/auth-validation";
 
-export function middleware(req: Request) {
-	const cookieStore = cookies();
+export async function middleware(req: NextRequest) {
+	switch (req.nextUrl.pathname) {
+		case "/api": {
+			const authUser = await authValidation(req);
 
-	const jwtToken = cookieStore.get("jwtToken");
+			if (authUser) {
+				return NextResponse.next();
+			}
 
-	if (!jwtToken) {
-		return new NextResponse("Unauthorized", { status: 401 });
-	}
+			return new NextResponse("Unauthorized", { status: 401 });
+		}
 
-	const jwtSecret = process.env.JWT_SECRET || "jwt_secret";
+		case "/auth": {
+			const authUser = await authValidation(req);
 
-	try {
-		const user = jwt.verify(jwtToken.value, jwtSecret);
+			if (!authUser) {
+				return NextResponse.next();
+			}
 
-		const response = {
-			user,
-		};
+			const fromUrl = req.nextUrl.searchParams.get('from')
+			const redirectUrl = new URL(fromUrl || '/profile', req.url);
 
-		return new NextResponse(JSON.stringify(response), { status: 200 });
-	} catch (e) {
-		return new NextResponse("Unauthorized", { status: 401 });
+			return NextResponse.redirect(redirectUrl);
+		}
+
+		case "/": {
+			const authUser = await authValidation(req);
+
+			if (authUser) {
+				return NextResponse.next();
+			}
+
+			const loginUrl = new URL("/auth", req.url);
+			loginUrl.searchParams.set("from", req.nextUrl.pathname);
+
+			return NextResponse.redirect(loginUrl);
+		}
+
+		default:
+			break;
 	}
 }
 
 export const config = {
-	matcher: ["/"],
+	matcher: ["/", "/auth"],
 };
