@@ -1,8 +1,4 @@
-import { useTheme } from "next-themes";
-
 export function AppLoader() {
-	const { theme } = useTheme();
-
 	const oddColor = "fill-neutral-800";
 	const evenColor = "fill-neutral-100";
 
