@@ -7,6 +7,7 @@ import * as z from "zod";
 import { registerSchema as formSchema } from "@/app/api/auth/register/route";
 import { useState, useRef } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
+import { useSearchParams, useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -37,6 +38,9 @@ export default function Register() {
 
 	const isSubmitting = form.formState.isSubmitting;
 
+	const searchParams = useSearchParams();
+	const router = useRouter();
+
 	async function onSubmit(values: z.infer<typeof formSchema>) {
 		setSubmitError("");
 
@@ -48,10 +52,13 @@ export default function Register() {
 				return;
 			}
 
-			const res = await axios.post("/api/auth/register", {
+			await axios.post("/api/auth/register", {
 				...values,
 				recaptchaToken,
 			});
+
+			const redirectUrl = searchParams.get("from") || "/profile";
+			router.push(redirectUrl);
 		} catch (e: unknown) {
 			const error = e as AxiosError;
 
@@ -59,7 +66,7 @@ export default function Register() {
 
 			const res = error.response as AxiosResponse<
 				{
-					field: keyof z.infer<typeof formSchema> | "internal";
+					field: keyof z.infer<typeof formSchema>;
 					message: string;
 				},
 				any
@@ -70,11 +77,9 @@ export default function Register() {
 				return;
 			}
 
-			// Recaptcha or internal server error handler
-			if (
-				res.data.field === "recaptchaToken" ||
-				res.data.field === "internal"
-			) {
+			// Validation, recaptcha or internal server error handler
+			const fields = ["validation", "recaptchaToken", "internal"];
+			if (fields.includes(res.data.field)) {
 				setSubmitError(res.data.message);
 				return;
 			}

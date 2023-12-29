@@ -1,11 +1,12 @@
 import { db } from "@/lib/db";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import * as z from "zod";
 import bcrypt from "bcryptjs";
 import { SignJWT } from "jose";
 import { nanoid } from "nanoid";
 import cookie from "cookie";
 import { verifyCaptcha } from "@/lib/server-actions";
+import { jsonResponse } from "@/lib/json-response";
 
 export const registerSchema = z
 	.object({
@@ -47,7 +48,13 @@ export async function POST(req: NextRequest) {
 		const body = registerSchema.safeParse(await req.json());
 
 		if (!body.success) {
-			return new NextResponse("Validation Error", { status: 400 });
+			return jsonResponse(
+				{
+					field: "validation",
+					message: "Validation Error",
+				},
+				400
+			);
 		}
 
 		const { username, email, password, recaptchaToken } = body.data;
@@ -55,14 +62,12 @@ export async function POST(req: NextRequest) {
 		const isRecaptchaCorrect = verifyCaptcha(recaptchaToken);
 
 		if (!isRecaptchaCorrect) {
-			return new NextResponse(
-				JSON.stringify({
+			return jsonResponse(
+				{
 					field: "recaptchaToken",
 					message: "Antibot system not passed",
-				}),
-				{
-					status: 400,
-				}
+				},
+				400
 			);
 		}
 
@@ -73,14 +78,12 @@ export async function POST(req: NextRequest) {
 		}));
 
 		if (userAlreadyExist) {
-			return new NextResponse(
-				JSON.stringify({
+			return jsonResponse(
+				{
 					field: "email",
 					message: "User with this email already exist",
-				}),
-				{
-					status: 400,
-				}
+				},
+				400
 			);
 		}
 
@@ -91,14 +94,12 @@ export async function POST(req: NextRequest) {
 		}));
 
 		if (usernameAlreadyTaken) {
-			return new NextResponse(
-				JSON.stringify({
+			return jsonResponse(
+				{
 					field: "username",
 					message: "Username already taken",
-				}),
-				{
-					status: 400,
-				}
+				},
+				400
 			);
 		}
 
@@ -119,7 +120,7 @@ export async function POST(req: NextRequest) {
 			.setProtectedHeader({ alg: "HS256" })
 			.setJti(nanoid())
 			.setIssuedAt()
-			.setExpirationTime(COOKIE_MAX_AGE)
+			.setExpirationTime("7d")
 			.sign(new TextEncoder().encode(jwtSecret));
 
 		const serialized = cookie.serialize("jwtToken", jwtToken, {
@@ -130,18 +131,17 @@ export async function POST(req: NextRequest) {
 			path: "/",
 		});
 
-		return new NextResponse("User successfully registered", {
-			status: 201,
+		return jsonResponse("User successfully registered", 201, {
 			headers: { "Set-Cookie": serialized },
 		});
 	} catch (error) {
 		console.log("[REGISTER_POST]", error);
-		return new NextResponse(
-			JSON.stringify({
+		return jsonResponse(
+			{
 				field: "internal",
 				message: "Internal Error",
-			}),
-			{ status: 500 }
+			},
+			400
 		);
 	}
 }
