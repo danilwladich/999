@@ -62,7 +62,7 @@ export default function Login() {
 
 			recaptchaRef.current?.reset();
 
-			const res = error.response as AxiosResponse<
+			const res = error?.response as AxiosResponse<
 				{
 					field: keyof z.infer<typeof formSchema>;
 					message: string;

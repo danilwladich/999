@@ -110,7 +110,7 @@ export async function POST(req: NextRequest) {
 				username,
 				email,
 				password: hashedPassword,
-				imageUrl: "./default-user.jpg",
+				imageUrl: "",
 			},
 		});
 

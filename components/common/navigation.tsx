@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, User, Settings } from "lucide-react";
+import { Home, Mail, User, Settings } from "lucide-react";
 import { useContext } from "react";
 import { AuthContext } from "@/components/providers/auth-provider";
 
@@ -29,6 +29,12 @@ export function Navigation() {
 			name: "Home",
 			icon: <Home size={ICON_SIZE} />,
 			isActive: pathname === "/",
+		},
+		{
+			path: "/messages",
+			name: "Messages",
+			icon: <Mail size={ICON_SIZE} />,
+			isActive: pathname === "/messages",
 		},
 		{
 			path: authUser ? "/profile" : "/auth",
@@ -75,7 +81,7 @@ function NavLink({
 			<Button variant="link" className={`gap-2 ${isActive ? "underline" : ""}`}>
 				{icon}
 
-				<p className="sr-only sm:not-sr-only sm:whitespace-nowrap">{name}</p>
+				<p className="sr-only md:not-sr-only md:whitespace-nowrap">{name}</p>
 			</Button>
 
 			{!isLastElement ? (
