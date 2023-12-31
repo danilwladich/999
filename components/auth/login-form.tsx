@@ -97,9 +97,9 @@ export default function Login() {
 							<FormLabel>Email</FormLabel>
 							<FormControl>
 								<Input
-									disabled={isSubmitting}
-									placeholder="example@mail.com"
 									{...field}
+									placeholder="example@mail.com"
+									disabled={isSubmitting}
 								/>
 							</FormControl>
 							<FormMessage />
@@ -115,10 +115,10 @@ export default function Login() {
 							<FormLabel>Password</FormLabel>
 							<FormControl>
 								<Input
-									disabled={isSubmitting}
+									{...field}
 									type="password"
 									placeholder="password"
-									{...field}
+									disabled={isSubmitting}
 								/>
 							</FormControl>
 							<FormMessage />
