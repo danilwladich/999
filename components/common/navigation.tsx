@@ -9,8 +9,6 @@ import { AuthContext } from "@/components/providers/auth-provider";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
-const ICON_SIZE = 16;
-
 interface ILink {
 	path: string;
 	name: string;
@@ -27,25 +25,25 @@ export function Navigation() {
 		{
 			path: "/",
 			name: "Home",
-			icon: <Home size={ICON_SIZE} />,
+			icon: <Home className="w-4 h-4" />,
 			isActive: pathname === "/",
 		},
 		{
 			path: "/messages",
 			name: "Messages",
-			icon: <Mail size={ICON_SIZE} />,
+			icon: <Mail className="w-4 h-4" />,
 			isActive: pathname === "/messages",
 		},
 		{
 			path: authUser ? "/profile" : "/auth",
 			name: authUser ? "Profile" : "Sing in",
-			icon: <User size={ICON_SIZE} />,
+			icon: <User className="w-4 h-4" />,
 			isActive: pathname === "/profile",
 		},
 		{
 			path: "/settings",
 			name: "Settings",
-			icon: <Settings size={ICON_SIZE} />,
+			icon: <Settings className="w-4 h-4" />,
 			isActive: pathname === "/settings",
 		},
 	];
