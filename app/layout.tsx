@@ -9,6 +9,9 @@ const font = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
 	title: "999 | marketplace",
 	description: "The best marketplace",
+	authors: [
+		{ name: "Daniel Wladyczeski", url: "https://github.com/danilwladich" },
+	],
 };
 
 export default function RootLayout({
