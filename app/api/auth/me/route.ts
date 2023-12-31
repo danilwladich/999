@@ -1,12 +1,13 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { authValidation } from "@/lib/auth-validation";
+import { jsonResponse } from "@/lib/json-response";
 
 export async function GET(req: NextRequest) {
-	const authUser = await authValidation(req);
+	const authUser = await authValidation();
 
 	if (!authUser) {
-		return new NextResponse("Unauthorized", { status: 401 });
+		return jsonResponse("Unauthorized", 401);
 	}
 
-	return new NextResponse(JSON.stringify(authUser), { status: 200 });
+	return jsonResponse(authUser, 200);
 }
