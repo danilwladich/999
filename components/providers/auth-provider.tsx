@@ -2,39 +2,49 @@
 
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
+
 import { AppLoader } from "@/components/ui/app-loader";
 import { useAuthMe } from "@/hooks/useAuthMe";
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-	const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
-	const { setUser } = useAuthMe();
+  const { setUser } = useAuthMe();
 
-	useEffect(() => {
-		async function authMe() {
-			setIsLoading(true);
+  // useEffect to handle the authentication process
+  useEffect(() => {
+    async function authMe() {
+      setIsLoading(true);
 
-			try {
-				const res = await axios.get("/api/auth/me");
+      try {
+        // Making a GET request to the authentication endpoint
+        const res = await axios.get("/api/auth/me");
 
-				setUser(res.data);
-			} catch (e: unknown) {
-				const error = e as AxiosError;
+        // Setting the authenticated user
+        setUser(res.data);
+      } catch (e: unknown) {
+        // Handling AxiosError
+        const error = e as AxiosError;
 
-				if (!error.response) {
-					alert(error.message);
-				}
-			}
+        // Handling non-response errors
+        if (!error.response) {
+          alert(error.message);
+        }
+      }
 
-			setIsLoading(false);
-		}
+      // Setting loading status to false
+      setIsLoading(false);
+    }
 
-		authMe();
-	}, []);
+    // Calling the authMe function when the component mounts
+    authMe();
+  }, []);
 
-	if (isLoading) {
-		return <AppLoader />;
-	}
+  // Displaying AppLoader while waiting for authentication to complete
+  if (isLoading) {
+    return <AppLoader />;
+  }
 
-	return children;
+  // Rendering children components once authentication is complete
+  return children;
 }

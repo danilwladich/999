@@ -22,6 +22,7 @@ import {
 import { Input } from "@/components/ui/input";
 
 export default function Login() {
+	// Setting up the form using react-hook-form with Zod resolver
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -33,40 +34,53 @@ export default function Login() {
 
 	const recaptchaRef = useRef<ReCAPTCHA>(null);
 
+	// State for handling submit errors
 	const [submitError, setSubmitError] = useState("");
 
+	// Checking if the form is currently submitting
 	const isSubmitting = form.formState.isSubmitting;
 
+	// Accessing query parameters from the URL
 	const searchParams = useSearchParams();
 	const router = useRouter();
 
 	const { setUser } = useAuthMe();
 
+	// Handler for form submission
 	async function onSubmit(values: z.infer<typeof formSchema>) {
+		// Clearing any previous submit errors
 		setSubmitError("");
 
 		try {
+			// Executing recaptcha to get the token
 			const recaptchaToken = await recaptchaRef.current?.executeAsync();
+
+			// Handling recaptcha errors
 			if (!recaptchaToken) {
 				recaptchaRef.current?.reset();
 				setSubmitError("Recaptcha error");
 				return;
 			}
 
-			const res= await axios.post("/api/auth/login", {
+			// Making a POST request to the login API endpoint
+			const res = await axios.post("/api/auth/login", {
 				...values,
 				recaptchaToken,
 			});
 
-			setUser(res.data)
+			// Setting the authenticated user and redirecting
+			setUser(res.data);
 
 			const redirectUrl = searchParams.get("from") || "/profile";
 			router.replace(redirectUrl);
 		} catch (e: unknown) {
+			// Handling AxiosError
 			const error = e as AxiosError;
 
+			// Resetting recaptcha
 			recaptchaRef.current?.reset();
 
+			// Extracting response from AxiosError
 			const res = error?.response as AxiosResponse<
 				{
 					field: keyof z.infer<typeof formSchema>;
@@ -75,18 +89,20 @@ export default function Login() {
 				any
 			>;
 
+			// Handling non-response errors
 			if (!res) {
 				alert(error.message);
 				return;
 			}
 
-			// Validation, recaptcha or internal server error handler
+			// Validation, recaptcha, or internal server error handler
 			const fields = ["validation", "recaptchaToken", "internal"];
 			if (fields.includes(res.data.field)) {
 				setSubmitError(res.data.message);
 				return;
 			}
 
+			// Setting form error for specific field
 			form.setError(res.data.field, { message: res.data.message });
 		}
 	}
@@ -145,7 +161,7 @@ export default function Login() {
 				)}
 
 				<Button type="submit" disabled={isSubmitting}>
-					Sing in
+					Sign in
 				</Button>
 			</form>
 		</Form>

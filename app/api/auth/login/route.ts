@@ -8,6 +8,7 @@ import cookie from "cookie";
 import { verifyCaptcha } from "@/lib/server-actions";
 import { jsonResponse } from "@/lib/json-response";
 
+// Defining a schema for the login request body using Zod
 export const loginSchema = z.object({
 	email: z.string().email("This is not a valid email."),
 	password: z.string().min(6, {
@@ -20,8 +21,10 @@ const COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
 
 export async function POST(req: NextRequest) {
 	try {
+		// Parsing and validating the request body
 		const body = loginSchema.safeParse(await req.json());
 
+		// Handling validation errors
 		if (!body.success) {
 			return jsonResponse(
 				{
@@ -34,8 +37,10 @@ export async function POST(req: NextRequest) {
 
 		const { email, password, recaptchaToken } = body.data;
 
+		// Verifying the recaptcha token
 		const isRecaptchaCorrect = verifyCaptcha(recaptchaToken);
 
+		// Handling recaptcha verification failure
 		if (!isRecaptchaCorrect) {
 			return jsonResponse(
 				{
@@ -46,24 +51,28 @@ export async function POST(req: NextRequest) {
 			);
 		}
 
+		// Find a user with the provided email
 		const user = await db.user.findFirst({
 			where: {
 				email,
 			},
 		});
 
+		// Handling non-existent user error
 		if (!user) {
 			return jsonResponse(
 				{
 					field: "email",
-					message: "User with this email doenst exist",
+					message: "User with this email doesn't exist",
 				},
 				400
 			);
 		}
 
+		// Comparing the provided password with the hashed password
 		const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
+		// Handling incorrect password error
 		if (!isPasswordCorrect) {
 			return jsonResponse(
 				{
@@ -74,10 +83,9 @@ export async function POST(req: NextRequest) {
 			);
 		}
 
+		// Generating a JWT token with user information excluding the password
 		const jwtSecret = process.env.JWT_SECRET || "jwt_secret";
-
 		const userWithoutPassword = { ...user, password: undefined };
-
 		const jwtToken = await new SignJWT(userWithoutPassword)
 			.setProtectedHeader({ alg: "HS256" })
 			.setJti(nanoid())
@@ -85,6 +93,7 @@ export async function POST(req: NextRequest) {
 			.setExpirationTime("7d")
 			.sign(new TextEncoder().encode(jwtSecret));
 
+		// Serializing the JWT token as a cookie and setting the response headers
 		const serialized = cookie.serialize("jwtToken", jwtToken, {
 			httpOnly: true,
 			secure: process.env.NODE_ENV === "production",
@@ -93,10 +102,12 @@ export async function POST(req: NextRequest) {
 			path: "/",
 		});
 
+		// Returning a JSON response with user information and set cookie header
 		return jsonResponse(userWithoutPassword, 201, {
 			headers: { "Set-Cookie": serialized },
 		});
 	} catch (error) {
+		// Handling internal error
 		console.log("[LOGIN_POST]", error);
 		return jsonResponse(
 			{

@@ -12,181 +12,197 @@ import { useAuthMe } from "@/hooks/useAuthMe";
 
 import { Button } from "@/components/ui/button";
 import {
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
 export default function Register() {
-	const form = useForm<z.infer<typeof formSchema>>({
-		resolver: zodResolver(formSchema),
-		defaultValues: {
-			username: "",
-			email: "",
-			password: "",
-			confirmPassword: "",
-			recaptchaToken: "",
-		},
-	});
+  // Setting up the form using react-hook-form with Zod resolver
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      username: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      recaptchaToken: "",
+    },
+  });
 
-	const recaptchaRef = useRef<ReCAPTCHA>(null);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
 
-	const [submitError, setSubmitError] = useState("");
+  // State for handling submit errors
+  const [submitError, setSubmitError] = useState("");
 
-	const isSubmitting = form.formState.isSubmitting;
+  // Checking if the form is currently submitting
+  const isSubmitting = form.formState.isSubmitting;
 
-	const searchParams = useSearchParams();
-	const router = useRouter();
+  // Accessing query parameters from the URL
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
-	const {setUser} = useAuthMe()
+  const { setUser } = useAuthMe();
 
-	async function onSubmit(values: z.infer<typeof formSchema>) {
-		setSubmitError("");
+  // Handler for form submission
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    // Clearing any previous submit errors
+    setSubmitError("");
 
-		try {
-			const recaptchaToken = await recaptchaRef.current?.executeAsync();
-			if (!recaptchaToken) {
-				recaptchaRef.current?.reset();
-				setSubmitError("Recaptcha error");
-				return;
-			}
+    try {
+      // Executing recaptcha to get the token
+      const recaptchaToken = await recaptchaRef.current?.executeAsync();
 
-			const res = await axios.post("/api/auth/register", {
-				...values,
-				recaptchaToken,
-			});
+      // Handling recaptcha errors
+      if (!recaptchaToken) {
+        recaptchaRef.current?.reset();
+        setSubmitError("Recaptcha error");
+        return;
+      }
 
-			setUser(res.data)
+      // Making a POST request to the register API endpoint
+      const res = await axios.post("/api/auth/register", {
+        ...values,
+        recaptchaToken,
+      });
 
-			const redirectUrl = searchParams.get("from") || "/profile";
-			router.replace(redirectUrl);
-		} catch (e: unknown) {
-			const error = e as AxiosError;
+      // Setting the authenticated user and redirecting
+      setUser(res.data);
 
-			recaptchaRef.current?.reset();
+      const redirectUrl = searchParams.get("from") || "/profile";
+      router.replace(redirectUrl);
+    } catch (e: unknown) {
+      // Handling AxiosError
+      const error = e as AxiosError;
 
-			const res = error?.response as AxiosResponse<
-				{
-					field: keyof z.infer<typeof formSchema>;
-					message: string;
-				},
-				any
-			>;
+      // Resetting recaptcha
+      recaptchaRef.current?.reset();
 
-			if (!res) {
-				alert(error.message);
-				return;
-			}
+      // Extracting response from AxiosError
+      const res = error?.response as AxiosResponse<
+        {
+          field: keyof z.infer<typeof formSchema>;
+          message: string;
+        },
+        any
+      >;
 
-			// Validation, recaptcha or internal server error handler
-			const fields = ["validation", "recaptchaToken", "internal"];
-			if (fields.includes(res.data.field)) {
-				setSubmitError(res.data.message);
-				return;
-			}
+      // Handling non-response errors
+      if (!res) {
+        alert(error.message);
+        return;
+      }
 
-			form.setError(res.data.field, { message: res.data.message });
-		}
-	}
+      // Validation, recaptcha, or internal server error handler
+      const fields = ["validation", "recaptchaToken", "internal"];
+      if (fields.includes(res.data.field)) {
+        setSubmitError(res.data.message);
+        return;
+      }
 
-	return (
-		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-				<FormField
-					control={form.control}
-					name="username"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Username</FormLabel>
-							<FormControl>
-								<Input
-									{...field}
-									placeholder="username"
-									disabled={isSubmitting}
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
+      // Setting form error for a specific field
+      form.setError(res.data.field, { message: res.data.message });
+    }
+  }
 
-				<FormField
-					control={form.control}
-					name="email"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Email</FormLabel>
-							<FormControl>
-								<Input
-									{...field}
-									placeholder="example@mail.com"
-									disabled={isSubmitting}
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <FormField
+          control={form.control}
+          name="username"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Username</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  placeholder="username"
+                  disabled={isSubmitting}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-				<FormField
-					control={form.control}
-					name="password"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Password</FormLabel>
-							<FormControl>
-								<Input
-									{...field}
-									type="password"
-									placeholder="password"
-									disabled={isSubmitting}
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  placeholder="example@mail.com"
+                  disabled={isSubmitting}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-				<FormField
-					control={form.control}
-					name="confirmPassword"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Confirm password</FormLabel>
-							<FormControl>
-								<Input
-									{...field}
-									type="password"
-									placeholder="confirm password"
-									disabled={isSubmitting}
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  type="password"
+                  placeholder="password"
+                  disabled={isSubmitting}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-				<ReCAPTCHA
-					className="absolute"
-					ref={recaptchaRef}
-					size="invisible"
-					sitekey="6LcwYyQkAAAAAMsq2VnRYkkqNqLt-ljuy-gfmPYn"
-				/>
+        <FormField
+          control={form.control}
+          name="confirmPassword"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Confirm password</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  type="password"
+                  placeholder="confirm password"
+                  disabled={isSubmitting}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-				{!!submitError && (
-					<p className="text-sm font-medium text-destructive text-center">
-						{submitError}
-					</p>
-				)}
+        <ReCAPTCHA
+          className="absolute"
+          ref={recaptchaRef}
+          size="invisible"
+          sitekey="6LcwYyQkAAAAAMsq2VnRYkkqNqLt-ljuy-gfmPYn"
+        />
 
-				<Button type="submit" disabled={isSubmitting}>
-					Sing up
-				</Button>
-			</form>
-		</Form>
-	);
+        {!!submitError && (
+          <p className="text-sm font-medium text-destructive text-center">
+            {submitError}
+          </p>
+        )}
+
+        <Button type="submit" disabled={isSubmitting}>
+          Sign up
+        </Button>
+      </form>
+    </Form>
+  );
 }

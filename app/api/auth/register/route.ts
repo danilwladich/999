@@ -8,6 +8,7 @@ import cookie from "cookie";
 import { verifyCaptcha } from "@/lib/server-actions";
 import { jsonResponse } from "@/lib/json-response";
 
+// Defining a schema for the registration request body using Zod
 export const registerSchema = z
 	.object({
 		username: z
@@ -36,17 +37,23 @@ export const registerSchema = z
 		}),
 		recaptchaToken: z.string(),
 	})
-	.refine((data) => data.password === data.confirmPassword, {
-		message: "Passwords don't match.",
-		path: ["confirmPassword"],
-	});
+	.refine(
+		// Additional refinement to check if passwords match in client
+		(data) => data.password === data.confirmPassword,
+		{
+			message: "Passwords don't match.",
+			path: ["confirmPassword"],
+		}
+	);
 
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
 
 export async function POST(req: NextRequest) {
 	try {
+		// Parsing and validating the request body
 		const body = registerSchema.safeParse(await req.json());
 
+		// Handling validation errors
 		if (!body.success) {
 			return jsonResponse(
 				{
@@ -59,8 +66,10 @@ export async function POST(req: NextRequest) {
 
 		const { username, email, password, recaptchaToken } = body.data;
 
+		// Verifying the recaptcha token
 		const isRecaptchaCorrect = verifyCaptcha(recaptchaToken);
 
+		// Handling recaptcha verification failure
 		if (!isRecaptchaCorrect) {
 			return jsonResponse(
 				{
@@ -71,28 +80,32 @@ export async function POST(req: NextRequest) {
 			);
 		}
 
+		// Checking if a user with the provided email already exists
 		const userAlreadyExist = !!(await db.user.findFirst({
 			where: {
 				email,
 			},
 		}));
 
+		// Handling existing user with the provided email error
 		if (userAlreadyExist) {
 			return jsonResponse(
 				{
 					field: "email",
-					message: "User with this email already exist",
+					message: "User with this email already exists",
 				},
 				400
 			);
 		}
 
+		// Checking if the provided username is already taken
 		const usernameAlreadyTaken = !!(await db.user.findFirst({
 			where: {
 				username,
 			},
 		}));
 
+		// Handling existing username error
 		if (usernameAlreadyTaken) {
 			return jsonResponse(
 				{
@@ -103,8 +116,10 @@ export async function POST(req: NextRequest) {
 			);
 		}
 
+		// Hashing the password
 		const hashedPassword = await bcrypt.hash(password, 12);
 
+		// Creating a new user
 		const user = await db.user.create({
 			data: {
 				username,
@@ -114,10 +129,9 @@ export async function POST(req: NextRequest) {
 			},
 		});
 
+		// Generating a JWT token with user information excluding the password
 		const jwtSecret = process.env.JWT_SECRET || "jwt_secret";
-
 		const userWithoutPassword = { ...user, password: undefined };
-
 		const jwtToken = await new SignJWT(userWithoutPassword)
 			.setProtectedHeader({ alg: "HS256" })
 			.setJti(nanoid())
@@ -125,6 +139,7 @@ export async function POST(req: NextRequest) {
 			.setExpirationTime("7d")
 			.sign(new TextEncoder().encode(jwtSecret));
 
+		// Serializing the JWT token as a cookie and setting the response headers
 		const serialized = cookie.serialize("jwtToken", jwtToken, {
 			httpOnly: true,
 			secure: process.env.NODE_ENV === "production",
@@ -133,10 +148,12 @@ export async function POST(req: NextRequest) {
 			path: "/",
 		});
 
+		// Returning a JSON response with user information and set cookie header
 		return jsonResponse(userWithoutPassword, 201, {
 			headers: { "Set-Cookie": serialized },
 		});
 	} catch (error) {
+		// Handling internal error
 		console.log("[REGISTER_POST]", error);
 		return jsonResponse(
 			{
