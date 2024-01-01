@@ -160,7 +160,7 @@ export async function POST(req: NextRequest) {
 				field: "internal",
 				message: "Internal Error",
 			},
-			400
+			500
 		);
 	}
 }

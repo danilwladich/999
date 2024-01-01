@@ -114,7 +114,7 @@ export async function POST(req: NextRequest) {
 				field: "email",
 				message: "Internal Error",
 			},
-			400
+			500
 		);
 	}
 }
