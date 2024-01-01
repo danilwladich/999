@@ -4,7 +4,7 @@ import { authValidation } from "@/lib/auth-validation";
 export async function middleware(req: NextRequest) {
 	switch (req.nextUrl.pathname) {
 		case "/api": {
-			const authUser = await authValidation(req);
+			const authUser = await authValidation();
 
 			if (authUser) {
 				return NextResponse.next();
@@ -14,7 +14,7 @@ export async function middleware(req: NextRequest) {
 		}
 
 		case "/auth": {
-			const authUser = await authValidation(req);
+			const authUser = await authValidation();
 
 			if (!authUser) {
 				return NextResponse.next();
@@ -27,7 +27,7 @@ export async function middleware(req: NextRequest) {
 		}
 
 		case "/profile": {
-			const authUser = await authValidation(req);
+			const authUser = await authValidation();
 
 			if (authUser) {
 				return NextResponse.next();

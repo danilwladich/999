@@ -1,13 +1,12 @@
 import { jwtVerify } from "jose";
-import type { NextRequest } from "next/server";
+import { cookies } from "next/headers";
 import type { User } from "@prisma/client";
 
 type UserWithoutPasswort = Omit<User, "password">;
 
-export async function authValidation(
-	req: NextRequest
-): Promise<UserWithoutPasswort | false> {
-	const jwtToken = req.cookies.get("jwtToken")?.value;
+export async function authValidation(): Promise<UserWithoutPasswort | false> {
+	const cookieStore = cookies();
+	const jwtToken = cookieStore.get("jwtToken")?.value;
 
 	if (!jwtToken) {
 		return false;

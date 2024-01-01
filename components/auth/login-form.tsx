@@ -8,6 +8,7 @@ import { loginSchema as formSchema } from "@/app/api/auth/login/route";
 import { useState, useRef } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useSearchParams, useRouter } from "next/navigation";
+import { useAuthMe } from "@/hooks/useAuthMe";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -39,6 +40,8 @@ export default function Login() {
 	const searchParams = useSearchParams();
 	const router = useRouter();
 
+	const { setUser } = useAuthMe();
+
 	async function onSubmit(values: z.infer<typeof formSchema>) {
 		setSubmitError("");
 
@@ -50,10 +53,12 @@ export default function Login() {
 				return;
 			}
 
-			await axios.post("/api/auth/login", {
+			const res= await axios.post("/api/auth/login", {
 				...values,
 				recaptchaToken,
 			});
+
+			setUser(res.data)
 
 			const redirectUrl = searchParams.get("from") || "/profile";
 			router.replace(redirectUrl);

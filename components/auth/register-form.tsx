@@ -8,6 +8,7 @@ import { registerSchema as formSchema } from "@/app/api/auth/register/route";
 import { useState, useRef } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useSearchParams, useRouter } from "next/navigation";
+import { useAuthMe } from "@/hooks/useAuthMe";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -41,6 +42,8 @@ export default function Register() {
 	const searchParams = useSearchParams();
 	const router = useRouter();
 
+	const {setUser} = useAuthMe()
+
 	async function onSubmit(values: z.infer<typeof formSchema>) {
 		setSubmitError("");
 
@@ -52,10 +55,12 @@ export default function Register() {
 				return;
 			}
 
-			await axios.post("/api/auth/register", {
+			const res = await axios.post("/api/auth/register", {
 				...values,
 				recaptchaToken,
 			});
+
+			setUser(res.data)
 
 			const redirectUrl = searchParams.get("from") || "/profile";
 			router.replace(redirectUrl);

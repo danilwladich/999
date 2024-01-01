@@ -3,8 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, Mail, User, Settings } from "lucide-react";
-import { useContext } from "react";
-import { AuthContext } from "@/components/providers/auth-provider";
+import { useAuthMe } from "@/hooks/useAuthMe";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -19,7 +18,7 @@ interface ILink {
 export function Navigation() {
 	const pathname = usePathname();
 
-	const authUser = useContext(AuthContext);
+	const { user: authUser } = useAuthMe();
 
 	const links: ILink[] = [
 		{

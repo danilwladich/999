@@ -76,7 +76,9 @@ export async function POST(req: NextRequest) {
 
 		const jwtSecret = process.env.JWT_SECRET || "jwt_secret";
 
-		const jwtToken = await new SignJWT({ ...user, password: undefined })
+		const userWithoutPassword = { ...user, password: undefined };
+
+		const jwtToken = await new SignJWT(userWithoutPassword)
 			.setProtectedHeader({ alg: "HS256" })
 			.setJti(nanoid())
 			.setIssuedAt()
@@ -91,7 +93,7 @@ export async function POST(req: NextRequest) {
 			path: "/",
 		});
 
-		return jsonResponse("User successfully loged", 201, {
+		return jsonResponse(userWithoutPassword, 201, {
 			headers: { "Set-Cookie": serialized },
 		});
 	} catch (error) {

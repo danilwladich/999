@@ -1,23 +1,14 @@
 "use client";
 
 import axios, { AxiosError } from "axios";
-import { useEffect, useState, createContext } from "react";
+import { useEffect, useState } from "react";
 import { AppLoader } from "@/components/ui/app-loader";
-import type { User } from "@prisma/client";
+import { useAuthMe } from "@/hooks/useAuthMe";
 
-type UserType = User | null;
-
-export const AuthContext = createContext<UserType>(null);
-
-export function AuthProvider({
-	children,
-	...props
-}: {
-	children: React.ReactNode;
-}) {
+export function AuthProvider({ children }: { children: React.ReactNode }) {
 	const [isLoading, setIsLoading] = useState(true);
 
-	const [user, setUser] = useState<UserType>(null);
+	const { setUser } = useAuthMe();
 
 	useEffect(() => {
 		async function authMe() {
@@ -45,9 +36,5 @@ export function AuthProvider({
 		return <AppLoader />;
 	}
 
-	return (
-		<AuthContext.Provider value={user} {...props}>
-			{children}
-		</AuthContext.Provider>
-	);
+	return children;
 }
