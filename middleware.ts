@@ -42,15 +42,24 @@ export async function middleware(req: NextRequest) {
 	}
 
 	if (req.nextUrl.pathname.startsWith("/profile")) {
-		// Checking authentication status
-		const authUser = await authValidation();
+		// Extract the searched user from the URL
+		const searchedUser: string | undefined = req.nextUrl.pathname.split("/")[2];
 
-		// If authenticated, allow the request to proceed
-		if (authUser) {
+		// Allow the request to proceed if searched user was provided
+		if (searchedUser) {
 			return NextResponse.next();
 		}
 
-		// If not authenticated, redirect to the login page and store the original URL
+		// Checking authentication status
+		const authUser = await authValidation();
+
+		// If authenticated but searched user not provided, redirect to the auth user profile
+		if (authUser) {
+			const userProfileUrl = new URL(`/profile/${authUser.username}`, req.url);
+			return NextResponse.redirect(userProfileUrl);
+		}
+
+		// If not authenticated and searched user not provided, redirect to the login page and store the original URL
 		const loginUrl = new URL("/auth", req.url);
 		loginUrl.searchParams.set("from", req.nextUrl.pathname);
 
@@ -60,5 +69,5 @@ export async function middleware(req: NextRequest) {
 
 // Configuration for the middleware, specifying the routes to apply the middleware to
 export const config = {
-	matcher: ["/auth", "/profile/:path*", "/api/auth/me"],
+	matcher: ["/auth", "/profile/:path?", "/api/auth/me"],
 };
