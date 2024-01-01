@@ -34,7 +34,7 @@ export function Navigation() {
 			isActive: pathname === "/messages",
 		},
 		{
-			path: authUser ? "/profile" : "/auth",
+			path: authUser ? `/profile/${authUser.username}` : "/auth",
 			name: authUser ? "Profile" : "Sing in",
 			icon: <User className="w-4 h-4" />,
 			isActive: pathname === "/profile",
