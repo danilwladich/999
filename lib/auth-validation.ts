@@ -1,17 +1,15 @@
 import { jwtVerify } from "jose";
 import { cookies } from "next/headers";
-import type { User } from "@prisma/client";
+import { UserWithoutPassword } from "@/types/UserWithoutPassword";
 
-type UserWithoutPassword = Omit<User, "password">;
-
-export async function authValidation(): Promise<UserWithoutPassword | false> {
+export async function authValidation(): Promise<UserWithoutPassword | undefined> {
 	// Extracting JWT token from the "jwtToken" cookie
 	const cookieStore = cookies();
 	const jwtToken = cookieStore.get("jwtToken")?.value;
 
 	// Checking if the JWT token is present
 	if (!jwtToken) {
-		return false;
+		return undefined;
 	}
 
 	const jwtSecret = process.env.JWT_SECRET || "jwt_secret";
@@ -31,6 +29,6 @@ export async function authValidation(): Promise<UserWithoutPassword | false> {
 	} catch (e) {
 		// Handling errors during JWT verification
 		console.log("[AUTH_VALIDATION]", e);
-		return false;
+		return undefined;
 	}
 }

@@ -60,5 +60,5 @@ export async function middleware(req: NextRequest) {
 
 // Configuration for the middleware, specifying the routes to apply the middleware to
 export const config = {
-	matcher: ["/auth", "/profile"],
+	matcher: ["/auth", "/profile/:path*", "/api/auth/me"],
 };

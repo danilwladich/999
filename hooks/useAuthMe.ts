@@ -1,7 +1,7 @@
 import { create } from "zustand";
-import type { User } from "@prisma/client";
+import { UserWithoutPassword } from "@/types/UserWithoutPassword";
 
-type UserType = User | null;
+type UserType = UserWithoutPassword | null;
 
 interface AuthStore {
 	user: UserType;
