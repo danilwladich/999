@@ -17,8 +17,8 @@ model User {
 
   imageUrl String
 
-  followers  Follower[]
-  followings Following[]
+  followings Follow[] @relation(name: "followings")
+  followers  Follow[] @relation(name: "followers")
 
   articles Article[]
 
@@ -28,22 +28,16 @@ model User {
   updatedAt DateTime @updatedAt
 }
 
-model Follower {
+model Follow {
   id Int @id @default(autoincrement())
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
+  whoFollowId    String
+  whomFollowId   String
+  whoFollowUser  User   @relation(name: "followings", fields: [whoFollowId], references: [id])
+  whomFollowUser User   @relation(name: "followers", fields: [whomFollowId], references: [id])
 
-  @@index([userId])
-}
-
-model Following {
-  id Int @id @default(autoincrement())
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
-
-  @@index([userId])
+  @@index([whoFollowId])
+  @@index([whomFollowId])
 }
 
 model Article {
