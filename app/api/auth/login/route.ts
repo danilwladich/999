@@ -10,7 +10,9 @@ import { jsonResponse } from "@/lib/json-response";
 
 // Defining a schema for the login request body using Zod
 export const loginSchema = z.object({
-	email: z.string().email("This is not a valid email."),
+	emailOrUsername: z
+		.string()
+		.min(4, { message: "This field must be at least 4 characters." }),
 	password: z.string().min(6, {
 		message: "Password must be at least 6 characters.",
 	}),
@@ -35,7 +37,7 @@ export async function POST(req: NextRequest) {
 			);
 		}
 
-		const { email, password, recaptchaToken } = body.data;
+		const { emailOrUsername, password, recaptchaToken } = body.data;
 
 		// Verifying the recaptcha token
 		const isRecaptchaCorrect = verifyCaptcha(recaptchaToken);
@@ -51,19 +53,32 @@ export async function POST(req: NextRequest) {
 			);
 		}
 
-		// Find a user with the provided email
-		const user = await db.user.findFirst({
-			where: {
-				email,
+		// Checking whether the provided identifier is an email or username
+		const itsEmail = emailOrUsername.includes("@");
+
+		// Array of conditions for the database query based on email or username
+		const dbWhere = [
+			{
+				username: emailOrUsername,
 			},
+			{
+				email: emailOrUsername,
+			},
+		];
+
+		// Fetching the user from the database
+		const user = await db.user.findFirst({
+			where: dbWhere[+itsEmail],
 		});
 
 		// Handling non-existent user error
 		if (!user) {
 			return jsonResponse(
 				{
-					field: "email",
-					message: "User with this email doesn't exist",
+					field: "emailOrUsername",
+					message: `User with this ${
+						itsEmail ? "email" : "username"
+					} doesn't exist`,
 				},
 				400
 			);
