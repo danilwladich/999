@@ -57,18 +57,13 @@ export async function POST(req: NextRequest) {
 		const itsEmail = emailOrUsername.includes("@");
 
 		// Array of conditions for the database query based on email or username
-		const dbWhere = [
-			{
-				username: emailOrUsername,
-			},
-			{
-				email: emailOrUsername,
-			},
-		];
+		const type = itsEmail ? "email" : "username";
 
 		// Fetching the user from the database
 		const user = await db.user.findFirst({
-			where: dbWhere[+itsEmail],
+			where: {
+				[type]: emailOrUsername,
+			},
 		});
 
 		// Handling non-existent user error
