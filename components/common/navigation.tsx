@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, Mail, User, Settings } from "lucide-react";
-import { useAuthMe } from "@/hooks/useAuthMe";
+import { useAuthMe } from "@/hooks/use-auth-me";
+import { cn } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -68,14 +69,10 @@ function NavLink({
 	isLastElement,
 }: ILink & { isLastElement: boolean }) {
 	return (
-		<Link
-			href={path}
-			key={name}
-			className="flex items-center justify-between flex-1"
-		>
+		<Link href={path} className="flex items-center justify-between flex-1">
 			<div />
 
-			<Button variant="link" className={`gap-2 ${isActive ? "underline" : ""}`}>
+			<Button variant="link" className={cn("gap-2", isActive && "underline")}>
 				{icon}
 
 				<p className="sr-only md:not-sr-only md:whitespace-nowrap">{name}</p>

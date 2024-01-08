@@ -122,7 +122,7 @@ export default function Register() {
 							<FormControl>
 								<Input
 									{...field}
-									placeholder="username"
+									placeholder="Username"
 									disabled={isSubmitting}
 								/>
 							</FormControl>
@@ -159,7 +159,7 @@ export default function Register() {
 								<Input
 									{...field}
 									type="password"
-									placeholder="password"
+									placeholder="Password"
 									disabled={isSubmitting}
 								/>
 							</FormControl>
@@ -178,7 +178,7 @@ export default function Register() {
 								<Input
 									{...field}
 									type="password"
-									placeholder="confirm password"
+									placeholder="Confirm password"
 									disabled={isSubmitting}
 								/>
 							</FormControl>

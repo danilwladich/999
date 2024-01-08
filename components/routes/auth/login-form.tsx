@@ -139,7 +139,7 @@ export default function Login() {
 								<Input
 									{...field}
 									type="password"
-									placeholder="password"
+									placeholder="Password"
 									disabled={isSubmitting}
 								/>
 							</FormControl>

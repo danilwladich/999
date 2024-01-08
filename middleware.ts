@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { authValidation } from "@/lib/auth-validation";
 
+function authRedirect(req: NextRequest) {
+	const loginUrl = new URL("/auth", req.url);
+	loginUrl.searchParams.set("from", req.nextUrl.pathname);
+
+	return NextResponse.redirect(loginUrl);
+}
+
 export async function middleware(req: NextRequest) {
 	if (req.nextUrl.pathname.startsWith("/api")) {
 		// Checking authentication status
@@ -36,7 +43,10 @@ export async function middleware(req: NextRequest) {
 
 		// If authenticated, redirect to the specified URL or default to "/profile"
 		const fromUrl = req.nextUrl.searchParams.get("from");
-		const redirectUrl = new URL(fromUrl || "/profile", req.url);
+		const redirectUrl = new URL(
+			fromUrl || `/profile/${authUser.username}`,
+			req.url
+		);
 
 		return NextResponse.redirect(redirectUrl);
 	}
@@ -60,14 +70,68 @@ export async function middleware(req: NextRequest) {
 		}
 
 		// If not authenticated and searched user not provided, redirect to the login page and store the original URL
-		const loginUrl = new URL("/auth", req.url);
-		loginUrl.searchParams.set("from", req.nextUrl.pathname);
+		return authRedirect(req);
+	}
 
-		return NextResponse.redirect(loginUrl);
+	if (req.nextUrl.pathname.startsWith("/followers")) {
+		// Extract the searched user from the URL
+		const searchedUser: string | undefined = req.nextUrl.pathname.split("/")[2];
+
+		// Allow the request to proceed if searched user was provided
+		if (searchedUser) {
+			return NextResponse.next();
+		}
+
+		// Checking authentication status
+		const authUser = await authValidation();
+
+		// If authenticated but searched user not provided, redirect to the auth user followers page
+		if (authUser) {
+			const userFollowersUrl = new URL(
+				`/followers/${authUser.username}`,
+				req.url
+			);
+			return NextResponse.redirect(userFollowersUrl);
+		}
+
+		// If not authenticated and searched user not provided, redirect to the login page and store the original URL
+		return authRedirect(req);
+	}
+
+	if (req.nextUrl.pathname.startsWith("/followings")) {
+		// Extract the searched user from the URL
+		const searchedUser: string | undefined = req.nextUrl.pathname.split("/")[2];
+
+		// Allow the request to proceed if searched user was provided
+		if (searchedUser) {
+			return NextResponse.next();
+		}
+
+		// Checking authentication status
+		const authUser = await authValidation();
+
+		// If authenticated but searched user not provided, redirect to the auth user followings page
+		if (authUser) {
+			const userFollowingsUrl = new URL(
+				`/followings/${authUser.username}`,
+				req.url
+			);
+			return NextResponse.redirect(userFollowingsUrl);
+		}
+
+		// If not authenticated and searched user not provided, redirect to the login page and store the original URL
+		return authRedirect(req);
 	}
 }
 
 // Configuration for the middleware, specifying the routes to apply the middleware to
 export const config = {
-	matcher: ["/auth", "/profile/:path?", "/api/auth/me"],
+	matcher: [
+		"/auth",
+		"/profile/:path?",
+		"/followers/:path?",
+		"/followings/:path?",
+		"/api/auth/me",
+		"/api/user/:path?",
+	],
 };
