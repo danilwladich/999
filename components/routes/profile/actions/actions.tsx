@@ -1,5 +1,6 @@
 "use client";
 
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { useAuthMe } from "@/hooks/use-auth-me";
 import { LogOut, MoreHorizontal, MessageCircle } from "lucide-react";
 import ShareButton from "./share-button";
@@ -34,6 +35,26 @@ export default function UserActions({
 	const isOwner = id === authUser?.id;
 
 	const isFollowing = followers.some((f) => f.whoFollowId === authUser?.id);
+
+	async function onLogOut() {
+		try {
+			await axios.delete("/api/auth/me");
+
+			router.push("/auth");
+		} catch (e: unknown) {
+			// Handling AxiosError
+			const error = e as AxiosError;
+
+			// Extracting response from AxiosError
+			const res = error?.response as AxiosResponse<string, any>;
+
+			// Handling non-response errors
+			if (!res) {
+				alert(error.message);
+				return;
+			}
+		}
+	}
 
 	return (
 		<DropdownMenu>
@@ -76,7 +97,7 @@ export default function UserActions({
 						<DropdownMenuSeparator />
 
 						<DropdownMenuGroup>
-							<DropdownMenuItem>
+							<DropdownMenuItem onClick={onLogOut}>
 								<LogOut className="mr-2 h-4 w-4" />
 								<span>Log out</span>
 							</DropdownMenuItem>
