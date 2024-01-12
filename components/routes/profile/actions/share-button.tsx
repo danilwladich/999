@@ -25,6 +25,10 @@ export default function ShareButton({ username }: { username: string }) {
 	async function onCopy(e: React.MouseEvent<HTMLDivElement>) {
 		e.preventDefault();
 
+		if (isCopied) {
+			return;
+		}
+
 		try {
 			await navigator.clipboard.writeText(url);
 
