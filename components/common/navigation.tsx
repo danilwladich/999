@@ -38,7 +38,7 @@ export function Navigation() {
 			path: authUser ? `/profile/${authUser.username}` : "/auth",
 			name: authUser ? "Profile" : "Sing in",
 			icon: <User className="w-4 h-4" />,
-			isActive: pathname === "/profile",
+			isActive: pathname === `/profile/${authUser?.username}`,
 		},
 		{
 			path: "/settings",
