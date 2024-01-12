@@ -1,14 +1,16 @@
 "use client";
 
 import { useModalStore } from "@/hooks/use-modal-store";
-
-import { Dialog } from "@/components/ui/dialog";
 import FollowersModal from "@/components/modals/followers-modal";
 import FollowingsModal from "@/components/modals/followings-modal";
+import EditProfileModal from "@/components/modals/edit-profile-modal";
+
+import { Dialog } from "@/components/ui/dialog";
 
 const modalsMap = {
 	followers: <FollowersModal />,
 	followings: <FollowingsModal />,
+	"edit profile": <EditProfileModal />,
 };
 
 export function ModalProvider() {

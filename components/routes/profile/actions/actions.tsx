@@ -1,11 +1,12 @@
 "use client";
 
-import axios, { AxiosError, AxiosResponse } from "axios";
 import { useAuthMe } from "@/hooks/use-auth-me";
-import { LogOut, MoreHorizontal, MessageCircle } from "lucide-react";
+import { useModalStore } from "@/hooks/use-modal-store";
 import ShareButton from "./share-button";
 import { useRouter } from "next/navigation";
 import type { Follow } from "@prisma/client";
+import FollowButton from "./follow-button";
+import LogOutButton from "./log-out-button";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -17,7 +18,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { FollowButton } from "./follow-button";
+import { MoreHorizontal, MessageCircle, Pencil } from "lucide-react";
 
 export default function UserActions({
 	id,
@@ -29,32 +30,12 @@ export default function UserActions({
 	followers: Follow[];
 }) {
 	const { user: authUser } = useAuthMe();
-
+	const { onOpen } = useModalStore();
 	const router = useRouter();
 
 	const isOwner = id === authUser?.id;
 
 	const isFollowing = followers.some((f) => f.whoFollowId === authUser?.id);
-
-	async function onLogOut() {
-		try {
-			await axios.delete("/api/auth/me");
-
-			router.push("/auth");
-		} catch (e: unknown) {
-			// Handling AxiosError
-			const error = e as AxiosError;
-
-			// Extracting response from AxiosError
-			const res = error?.response as AxiosResponse<string, any>;
-
-			// Handling non-response errors
-			if (!res) {
-				alert(error.message);
-				return;
-			}
-		}
-	}
 
 	return (
 		<DropdownMenu>
@@ -94,13 +75,17 @@ export default function UserActions({
 
 				{isOwner && (
 					<>
+						<DropdownMenuGroup>
+							<DropdownMenuItem onClick={() => onOpen("edit profile")}>
+								<Pencil className="mr-2 h-4 w-4" />
+								<span>Edit</span>
+							</DropdownMenuItem>
+						</DropdownMenuGroup>
+
 						<DropdownMenuSeparator />
 
 						<DropdownMenuGroup>
-							<DropdownMenuItem onClick={onLogOut}>
-								<LogOut className="mr-2 h-4 w-4" />
-								<span>Log out</span>
-							</DropdownMenuItem>
+							<LogOutButton />
 						</DropdownMenuGroup>
 					</>
 				)}
