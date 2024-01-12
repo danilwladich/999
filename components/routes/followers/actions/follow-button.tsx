@@ -3,9 +3,10 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useModalStore } from "@/hooks/use-modal-store";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { UserPlus } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+
+import { UserPlus, UserMinus } from "lucide-react";
 
 export function FollowButton({
 	isFollowing,
@@ -72,7 +73,12 @@ export function FollowButton({
 			disabled={isLoading}
 			onClick={(e) => onFollow(e, isFollowing)}
 		>
-			<UserPlus className="mr-2 h-4 w-4" />
+			{isFollowing ? (
+				<UserMinus className="mr-2 h-4 w-4" />
+			) : (
+				<UserPlus className="mr-2 h-4 w-4" />
+			)}
+
 			<span>{isFollowing ? "Unfollow" : "Follow"}</span>
 		</DropdownMenuItem>
 	);
