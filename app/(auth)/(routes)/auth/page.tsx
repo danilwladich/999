@@ -1,5 +1,5 @@
-import RegisterForm from "@/components/routes/auth/register-form";
-import LoginForm from "@/components/routes/auth/login-form";
+import RegisterForm from "@/components/forms/register-form";
+import LoginForm from "@/components/forms/login-form";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
 	Card,
