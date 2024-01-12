@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-type ModalType = "edit profile";
+type ModalType = "followers" | "followings";
 
 interface ModalStore {
 	type: ModalType | null;

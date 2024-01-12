@@ -10,7 +10,9 @@ export default function MainLayout({
 		<>
 			<Header />
 
-			<main className="container pt-2 pb-16 md:pt-16 md:pb-2">{children}</main>
+			<main className="pt-2 md:pt-16 pb-16 md:pb-2 px-2 md:container">
+				{children}
+			</main>
 
 			<Footer />
 		</>

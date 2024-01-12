@@ -21,12 +21,8 @@ export default function User({
 		<div className="flex flex-col md:flex-row gap-4 justify-between items-center">
 			<UserInfo username={username} imageUrl={imageUrl} />
 
-			<div className="flex gap-2 items-center w-full md:w-auto">
-				<UserFollowers
-					username={username}
-					followers={followers}
-					followings={followings}
-				/>
+			<div className="flex gap-2 items-center w-full">
+				<UserFollowers followers={followers} followings={followings} />
 
 				<UserActions id={id} username={username} followers={followers} />
 			</div>

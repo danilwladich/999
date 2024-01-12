@@ -1,4 +1,4 @@
-import { UserWithoutPassword } from "@/types/UserWithoutPassword";
+import type { UserWithoutPassword } from "@/types/UserWithoutPassword";
 import { NextRequest } from "next/server";
 
 export function getAuthUser(req: NextRequest): UserWithoutPassword {

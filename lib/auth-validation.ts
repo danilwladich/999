@@ -1,8 +1,10 @@
 import { jwtVerify } from "jose";
 import { cookies } from "next/headers";
-import { UserWithoutPassword } from "@/types/UserWithoutPassword";
+import type { UserWithoutPassword } from "@/types/UserWithoutPassword";
 
-export async function authValidation(): Promise<UserWithoutPassword | undefined> {
+export async function authValidation(): Promise<
+	UserWithoutPassword | undefined
+> {
 	// Extracting JWT token from the "jwtToken" cookie
 	const cookieStore = cookies();
 	const jwtToken = cookieStore.get("jwtToken")?.value;

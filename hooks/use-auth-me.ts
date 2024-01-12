@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { UserWithoutPassword } from "@/types/UserWithoutPassword";
+import type { UserWithoutPassword } from "@/types/UserWithoutPassword";
 
 type UserType = UserWithoutPassword | null;
 
