@@ -2,11 +2,9 @@ import { db } from "@/lib/db";
 import { NextRequest } from "next/server";
 import * as z from "zod";
 import bcrypt from "bcryptjs";
-import { SignJWT } from "jose";
-import { nanoid } from "nanoid";
-import cookie from "cookie";
 import { verifyCaptcha } from "@/lib/server-actions";
 import { jsonResponse } from "@/lib/json-response";
+import { serializeJwt } from "@/lib/serialize-jwt";
 
 // Defining a schema for the registration request body using Zod
 export const registerSchema = z
@@ -45,8 +43,6 @@ export const registerSchema = z
 			path: ["confirmPassword"],
 		}
 	);
-
-const COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
 
 export async function POST(req: NextRequest) {
 	try {
@@ -129,24 +125,9 @@ export async function POST(req: NextRequest) {
 			},
 		});
 
-		// Generating a JWT token with user information excluding the password
-		const jwtSecret = process.env.JWT_SECRET || "jwt_secret";
 		const userWithoutPassword = { ...user, password: undefined };
-		const jwtToken = await new SignJWT(userWithoutPassword)
-			.setProtectedHeader({ alg: "HS256" })
-			.setJti(nanoid())
-			.setIssuedAt()
-			.setExpirationTime("7d")
-			.sign(new TextEncoder().encode(jwtSecret));
 
-		// Serializing the JWT token as a cookie and setting the response headers
-		const serialized = cookie.serialize("jwtToken", jwtToken, {
-			httpOnly: true,
-			secure: process.env.NODE_ENV === "production",
-			maxAge: COOKIE_MAX_AGE,
-			sameSite: "strict",
-			path: "/",
-		});
+		const serialized = await serializeJwt(userWithoutPassword);
 
 		// Returning a JSON response with user information and set cookie header
 		return jsonResponse(userWithoutPassword, 201, {
