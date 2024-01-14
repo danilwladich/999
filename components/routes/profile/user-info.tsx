@@ -1,7 +1,8 @@
 "use client";
 
+import { useUserImageSrc } from "@/hooks/use-user-image-src";
+
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { useTheme } from "next-themes";
 
 export default function UserInfo({
 	username,
@@ -10,17 +11,13 @@ export default function UserInfo({
 	username: string;
 	imageUrl: string;
 }) {
-	const { resolvedTheme } = useTheme();
-
-	const imageSrc =
-		imageUrl || resolvedTheme === "dark"
-			? "/images/common/user-dark.jpg"
-			: "/images/common/user-light.jpg";
-
 	return (
 		<div className="w-full flex flex-row gap-2 md:gap-4 items-center overflow-hidden">
 			<Avatar className="w-20 md:w-24 h-20 md:h-24">
-				<AvatarImage src={imageSrc} alt={`Avatar ${username}`} />
+				<AvatarImage
+					src={useUserImageSrc(imageUrl)}
+					alt={`Avatar ${username}`}
+				/>
 				<AvatarFallback>{username[0]}</AvatarFallback>
 			</Avatar>
 
