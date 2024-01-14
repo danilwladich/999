@@ -132,6 +132,6 @@ export const config = {
 		"/followers/:path?",
 		"/followings/:path?",
 		"/api/auth/me",
-		"/api/user/:path?",
+		"/api/user/:path*",
 	],
 };

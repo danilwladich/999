@@ -3,14 +3,16 @@
 import { useModalStore } from "@/hooks/use-modal-store";
 import FollowersModal from "@/components/modals/followers-modal";
 import FollowingsModal from "@/components/modals/followings-modal";
-import EditProfileModal from "@/components/modals/edit-profile-modal";
+import EditUsernameModal from "@/components/modals/edit-username-modal";
+import EditAvatarModal from "@/components/modals/edit-avatar-modal";
 
 import { Dialog } from "@/components/ui/dialog";
 
 const modalsMap = {
 	followers: <FollowersModal />,
 	followings: <FollowingsModal />,
-	"edit profile": <EditProfileModal />,
+	"edit username": <EditUsernameModal />,
+	"edit avatar": <EditAvatarModal />,
 };
 
 export function ModalProvider() {

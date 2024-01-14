@@ -2,6 +2,7 @@
 
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 import { AppLoader } from "@/components/ui/app-loader";
 import { useAuthMe } from "@/hooks/use-auth-me";
@@ -28,7 +29,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
 				// Handling non-response errors
 				if (!error.response) {
-					alert(error.message);
+					toast.error("Auth me error", { description: error.message });
 				}
 			}
 

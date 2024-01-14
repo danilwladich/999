@@ -76,9 +76,9 @@ export default function UserActions({
 				{isOwner && (
 					<>
 						<DropdownMenuGroup>
-							<DropdownMenuItem onClick={() => onOpen("edit profile")}>
+							<DropdownMenuItem onClick={() => onOpen("edit username")}>
 								<Pencil className="mr-2 h-4 w-4" />
-								<span>Edit</span>
+								<span>Edit username</span>
 							</DropdownMenuItem>
 						</DropdownMenuGroup>
 
