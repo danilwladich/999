@@ -9,6 +9,7 @@ import { useState, useRef } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useAuthMe } from "@/hooks/use-auth-me";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -94,7 +95,7 @@ export default function Register() {
 
 			// Handling non-response errors
 			if (!res) {
-				alert(error.message);
+				toast.error("Register error", { description: error.message });
 				return;
 			}
 

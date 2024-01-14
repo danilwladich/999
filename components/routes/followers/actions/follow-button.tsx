@@ -5,6 +5,7 @@ import { useModalStore } from "@/hooks/use-modal-store";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 import { UserPlus, UserMinus } from "lucide-react";
 
@@ -21,7 +22,7 @@ export function FollowButton({
 }) {
 	const { onClose } = useModalStore();
 
-	const [isLoading, setIsloading] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const router = useRouter();
 
@@ -31,7 +32,7 @@ export function FollowButton({
 	) {
 		e.preventDefault();
 
-		setIsloading(true);
+		setIsLoading(true);
 
 		try {
 			if (isFollowing) {
@@ -55,7 +56,7 @@ export function FollowButton({
 
 			// Handling non-response errors
 			if (!res) {
-				alert(error.message);
+				toast.error("Follow user error", { description: error.message });
 				return;
 			}
 
@@ -65,7 +66,7 @@ export function FollowButton({
 			}
 		}
 
-		setIsloading(false);
+		setIsLoading(false);
 	}
 
 	return (

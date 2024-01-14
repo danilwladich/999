@@ -2,6 +2,7 @@
 
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 import { LogOut } from "lucide-react";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
@@ -23,7 +24,7 @@ export default function LogOutButton() {
 
 			// Handling non-response errors
 			if (!res) {
-				alert(error.message);
+				toast.error("Log out error", { description: error.message });
 				return;
 			}
 		}
