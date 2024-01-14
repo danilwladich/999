@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { editUsernameSchema as formSchema } from "@/app/api/user/username/route";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthMe } from "@/hooks/use-auth-me";
 import { useModalStore } from "@/hooks/use-modal-store";

@@ -18,8 +18,6 @@ export const editUsernameSchema = z.object({
 
 export async function PATCH(req: NextRequest) {
 	try {
-		const authUser = getAuthUser(req);
-
 		// Parsing and validating the request body
 		const body = editUsernameSchema.safeParse(await req.json());
 
@@ -53,6 +51,8 @@ export async function PATCH(req: NextRequest) {
 				400
 			);
 		}
+
+		const authUser = getAuthUser(req);
 
 		const user = await db.user.update({
 			where: {
