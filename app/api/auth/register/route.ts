@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { NextRequest } from "next/server";
+import type { NextRequest } from "next/server";
 import { registerSchema } from "@/lib/form-schema";
 import bcrypt from "bcryptjs";
 import { verifyCaptcha } from "@/lib/server-actions";

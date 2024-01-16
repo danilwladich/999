@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { NextRequest } from "next/server";
+import type { NextRequest } from "next/server";
 import { editUsernameSchema } from "@/lib/form-schema";
 import { jsonResponse } from "@/lib/json-response";
 import { getAuthUser } from "@/lib/get-auth-user";
