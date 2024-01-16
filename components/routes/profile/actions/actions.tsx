@@ -18,7 +18,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MoreHorizontal, MessageCircle, Pencil } from "lucide-react";
+import { MoreHorizontal, MessageCircle, Pencil, ImagePlus } from "lucide-react";
 
 export default function UserActions({
 	id,
@@ -75,10 +75,17 @@ export default function UserActions({
 
 				{isOwner && (
 					<>
+						<DropdownMenuSeparator />
+
 						<DropdownMenuGroup>
 							<DropdownMenuItem onClick={() => onOpen("edit username")}>
 								<Pencil className="mr-2 h-4 w-4" />
 								<span>Edit username</span>
+							</DropdownMenuItem>
+
+							<DropdownMenuItem onClick={() => onOpen("edit avatar")}>
+								<ImagePlus className="mr-2 h-4 w-4" />
+								<span>Edit avatar</span>
 							</DropdownMenuItem>
 						</DropdownMenuGroup>
 

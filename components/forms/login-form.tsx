@@ -10,6 +10,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useAuthMe } from "@/hooks/use-auth-me";
 import { toast } from "sonner";
+import { ErrorResponse } from "@/types/ErrorResponse";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -83,13 +84,7 @@ export default function Login() {
 			recaptchaRef.current?.reset();
 
 			// Extracting response from AxiosError
-			const res = error?.response as AxiosResponse<
-				{
-					field: keyof z.infer<typeof formSchema>;
-					message: string;
-				},
-				any
-			>;
+			const res = error?.response as ErrorResponse<typeof formSchema>;
 
 			// Handling non-response errors
 			if (!res) {

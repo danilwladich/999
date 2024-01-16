@@ -22,10 +22,7 @@ export default function UserInfo({
 			className="flex gap-2 items-center flex-1"
 		>
 			<Avatar className="w-10 h-10">
-				<AvatarImage
-					src={useUserImageSrc(imageUrl)}
-					alt={`Avatar ${username}`}
-				/>
+				<AvatarImage src={useUserImageSrc(imageUrl)} alt={username} />
 				<AvatarFallback>{username[0]}</AvatarFallback>
 			</Avatar>
 

@@ -11,7 +11,7 @@ export default function EditAvatarModal() {
 	return (
 		<DialogContent className="sm:max-w-[425px]">
 			<DialogHeader>
-				<DialogTitle>Edit profile image</DialogTitle>
+				<DialogTitle>Edit avatar</DialogTitle>
 				<DialogDescription>Upload new profile image</DialogDescription>
 			</DialogHeader>
 

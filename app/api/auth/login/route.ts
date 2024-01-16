@@ -89,8 +89,8 @@ export async function POST(req: NextRequest) {
 			);
 		}
 
+		// Serializing the user object into a JWT token
 		const userWithoutPassword = { ...user, password: undefined };
-
 		const serialized = await serializeJwt(userWithoutPassword);
 
 		// Returning a JSON response with user information and set cookie header

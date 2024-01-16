@@ -4,12 +4,14 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { editUsernameSchema as formSchema } from "@/app/api/user/username/route";
+import { editAvatarSchema as formSchema } from "@/app/api/user/avatar/route";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthMe } from "@/hooks/use-auth-me";
-import { useModalStore } from "@/hooks/use-modal-store";
+import { useUserImageSrc } from "@/hooks/use-user-image-src";
 import { toast } from "sonner";
+import { useModalStore } from "@/hooks/use-modal-store";
+import { parseFormDataFromJson } from "@/lib/formdata-parser";
 import { ErrorResponse } from "@/types/ErrorResponse";
 
 import { Button } from "@/components/ui/button";
@@ -22,15 +24,18 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
-export default function EditUsernameForm() {
+export default function EditAvatarForm() {
 	// Setting up the form using react-hook-form with Zod resolver
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			username: "",
+			image: undefined,
 		},
 	});
+
+	const [selectedImage, setSelectedImage] = useState<File>();
 
 	// State for handling submit errors
 	const [submitError, setSubmitError] = useState("");
@@ -48,16 +53,20 @@ export default function EditUsernameForm() {
 		setSubmitError("");
 
 		try {
-			// Making a PATCH request to the user username API endpoint
-			const res = await axios.patch("/api/user/username", values);
+			const formData = parseFormDataFromJson(values);
 
-			// Updating the user state with the new username
+			// Making a PATCH request to the user avatar API endpoint
+			const res = await axios.patch("/api/user/avatar", formData, {
+				headers: { "Content-Type": "multipart/form-data" },
+			});
+
+			// Updating the user state with the new avatar
 			setUser(res.data);
 
 			// Close the modal
 			onClose();
 
-			router.push(`/profile/${values.username}`);
+			router.refresh();
 		} catch (e: unknown) {
 			// Handling AxiosError
 			const error = e as AxiosError;
@@ -67,7 +76,7 @@ export default function EditUsernameForm() {
 
 			// Handling non-response errors
 			if (!res) {
-				toast.error("Edit username error", { description: error.message });
+				toast.error("Edit avatar error", { description: error.message });
 				return;
 			}
 
@@ -85,21 +94,41 @@ export default function EditUsernameForm() {
 
 	return (
 		<Form {...form}>
-			<form
-				onSubmit={form.handleSubmit(onSubmit)}
-				className="space-y-8 relative"
-			>
+			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
 				<FormField
 					control={form.control}
-					name="username"
+					name="image"
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>Username</FormLabel>
+							<FormLabel className="flex justify-center mt-4">
+								<Avatar className="w-24 h-24 cursor-pointer">
+									<AvatarImage
+										src={
+											selectedImage
+												? URL.createObjectURL(selectedImage)
+												: useUserImageSrc(authUser?.imageUrl)
+										}
+										alt={authUser?.username || "not auth"}
+									/>
+									<AvatarFallback>
+										{authUser?.username[0] || "not auth"}
+									</AvatarFallback>
+								</Avatar>
+							</FormLabel>
 							<FormControl>
 								<Input
 									{...field}
-									placeholder={authUser?.username || "Username"}
+									onChange={(e) => {
+										const image = e.target.files?.[0] || undefined;
+										setSelectedImage(image);
+										field.onChange(image);
+									}}
+									value=""
+									type="file"
+									accept="image/png, image/jpeg"
 									disabled={isSubmitting}
+									className="hidden"
+									ref={field.ref}
 								/>
 							</FormControl>
 							<FormMessage />

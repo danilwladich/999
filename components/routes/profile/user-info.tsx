@@ -14,10 +14,7 @@ export default function UserInfo({
 	return (
 		<div className="w-full flex flex-row gap-2 md:gap-4 items-center overflow-hidden">
 			<Avatar className="w-20 md:w-24 h-20 md:h-24">
-				<AvatarImage
-					src={useUserImageSrc(imageUrl)}
-					alt={`Avatar ${username}`}
-				/>
+				<AvatarImage src={useUserImageSrc(imageUrl)} alt={username} />
 				<AvatarFallback>{username[0]}</AvatarFallback>
 			</Avatar>
 
