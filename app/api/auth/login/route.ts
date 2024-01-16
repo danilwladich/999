@@ -1,21 +1,10 @@
 import { db } from "@/lib/db";
 import { NextRequest } from "next/server";
-import * as z from "zod";
+import { loginSchema } from "@/lib/form-schema";
 import bcrypt from "bcryptjs";
 import { verifyCaptcha } from "@/lib/server-actions";
 import { jsonResponse } from "@/lib/json-response";
 import { serializeJwt } from "@/lib/serialize-jwt";
-
-// Defining a schema for the login request body using Zod
-export const loginSchema = z.object({
-	emailOrUsername: z
-		.string()
-		.min(4, { message: "This field must be at least 4 characters." }),
-	password: z.string().min(6, {
-		message: "Password must be at least 6 characters.",
-	}),
-	recaptchaToken: z.string(),
-});
 
 export async function POST(req: NextRequest) {
 	try {

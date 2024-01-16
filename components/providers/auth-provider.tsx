@@ -39,7 +39,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
 		// Calling the authMe function when the component mounts
 		authMe();
-	}, []);
+	}, [setUser]);
 
 	// Displaying AppLoader while waiting for authentication to complete
 	if (isLoading) {

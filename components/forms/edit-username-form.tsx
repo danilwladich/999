@@ -1,10 +1,10 @@
 "use client";
 
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosError } from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { editUsernameSchema as formSchema } from "@/app/api/user/username/route";
+import { editUsernameSchema as formSchema } from "@/lib/form-schema";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthMe } from "@/hooks/use-auth-me";

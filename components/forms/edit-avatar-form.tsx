@@ -1,10 +1,10 @@
 "use client";
 
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosError } from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { editAvatarSchema as formSchema } from "@/app/api/user/avatar/route";
+import { editAvatarSchema as formSchema } from "@/lib/form-schema";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthMe } from "@/hooks/use-auth-me";
@@ -46,6 +46,8 @@ export default function EditAvatarForm() {
 	const router = useRouter();
 	const { user: authUser, setUser } = useAuthMe();
 	const { onClose } = useModalStore();
+
+	const defaultImageSrc = useUserImageSrc(authUser?.imageUrl);
 
 	// Handler for form submission
 	async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -106,7 +108,7 @@ export default function EditAvatarForm() {
 										src={
 											selectedImage
 												? URL.createObjectURL(selectedImage)
-												: useUserImageSrc(authUser?.imageUrl)
+												: defaultImageSrc
 										}
 										alt={authUser?.username || "not auth"}
 									/>

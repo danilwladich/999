@@ -1,20 +1,9 @@
 import { db } from "@/lib/db";
 import { NextRequest } from "next/server";
-import * as z from "zod";
+import { editUsernameSchema } from "@/lib/form-schema";
 import { jsonResponse } from "@/lib/json-response";
 import { getAuthUser } from "@/lib/get-auth-user";
 import { serializeJwt } from "@/lib/serialize-jwt";
-
-export const editUsernameSchema = z.object({
-	username: z
-		.string()
-		.trim()
-		.regex(/^\w+$/g, "Username must be alphanumeric.")
-		.min(4, {
-			message: "Username must be at least 4 characters.",
-		})
-		.max(16, { message: "Username must be less than 16 characters." }),
-});
 
 export async function PATCH(req: NextRequest) {
 	try {
@@ -63,8 +52,8 @@ export async function PATCH(req: NextRequest) {
 			},
 		});
 
+		// Serializing the user object into a JWT token
 		const userWithoutPassword = { ...user, password: undefined };
-
 		const serialized = await serializeJwt(userWithoutPassword);
 
 		// Returning a JSON response with user information and set cookie header

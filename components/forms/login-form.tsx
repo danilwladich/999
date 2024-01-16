@@ -1,10 +1,10 @@
 "use client";
 
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosError } from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { loginSchema as formSchema } from "@/app/api/auth/login/route";
+import { loginSchema as formSchema } from "@/lib/form-schema";
 import { useState, useRef } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useSearchParams, useRouter } from "next/navigation";
