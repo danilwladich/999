@@ -8,6 +8,12 @@ datasource db {
   relationMode = "prisma"
 }
 
+enum Currency {
+  USD
+  EUR
+  PLN
+}
+
 model User {
   id       String @id @default(uuid())
   username String @unique
@@ -46,9 +52,11 @@ model Article {
   userId String
   user   User   @relation(fields: [userId], references: [id])
 
-  label       String
-  description String
+  title       String
+  description String?
   imagesUrl   ArticleImage[]
+  amount      Int
+  currency    Currency       @default(USD)
 
   favorite FavoriteArticle[]
 
