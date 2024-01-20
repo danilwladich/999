@@ -2,6 +2,8 @@ import { db } from "@/lib/db";
 import User from "@/components/routes/profile/user";
 import type { Metadata } from "next";
 
+import { Card, CardContent } from "@/components/ui/card";
+
 export async function generateMetadata({
 	params,
 }: {
@@ -38,8 +40,10 @@ export default async function Profile({
 	}
 
 	return (
-		<div>
-			<User {...user} />
-		</div>
+		<Card>
+			<CardContent>
+				<User {...user} />
+			</CardContent>
+		</Card>
 	);
 }
