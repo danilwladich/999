@@ -1,4 +1,4 @@
-import EditAvatarForm from "@/components/forms/edit-avatar-form";
+import EditAvatarForm from "@/components/forms/user/edit-avatar-form";
 
 import {
 	DialogContent,

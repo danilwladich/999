@@ -1,4 +1,4 @@
-import EditUsernameForm from "@/components/forms/edit-username-form";
+import EditUsernameForm from "@/components/forms/user/edit-username-form";
 
 import {
 	DialogContent,
