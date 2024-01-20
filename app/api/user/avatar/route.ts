@@ -64,6 +64,7 @@ export async function PATCH(req: NextRequest) {
 			filename
 		);
 
+		// Updating the user's avatar
 		const user = await db.user.update({
 			where: {
 				id: authUser.id,
