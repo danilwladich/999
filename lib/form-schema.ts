@@ -4,13 +4,14 @@ import { Currency } from "@prisma/client";
 
 const MAX_FILE_SIZE = 1024 * 1024 * 5;
 const MAX_FILE_SIZE_STRING = "5MB";
-const ACCEPTED_IMAGE_TYPES = [
+export const ACCEPTED_IMAGE_TYPES = [
 	"image/jpeg",
 	"image/jpg",
 	"image/png",
 	"image/webp",
 ];
 const ACCEPTED_IMAGE_TYPES_STRING = ".jpg, .jpeg, .png and .webp";
+export const MAX_FILES_COUNT = 5;
 
 export const loginSchema = z.object({
 	emailOrUsername: z
@@ -87,17 +88,20 @@ export const editAvatarSchema = z.object({
 export const articleSchema = z.object({
 	title: z
 		.string()
+		.trim()
 		.min(4, { message: "Title must be at least 4 characters." })
 		.max(40, { message: "Title must be less than 40 characters." }),
 	description: z
 		.string()
+		.trim()
 		.max(400, { message: "Description must be less than 400 characters." })
 		.optional(),
 	images: z
 		.any()
 		.refine(
-			(files?: File[]) => (files?.length ? files.length <= 10 : true),
-			"Maximum number of images must be at less than 10"
+			(files?: File[]) =>
+				files?.length ? files.length <= MAX_FILES_COUNT : true,
+			`Maximum number of images must be at less than ${MAX_FILES_COUNT}.`
 		)
 		.refine(
 			(files?: File[]) => files?.every((file) => file.size <= MAX_FILE_SIZE),
@@ -109,9 +113,13 @@ export const articleSchema = z.object({
 			`Only ${ACCEPTED_IMAGE_TYPES_STRING} formats are supported.`
 		),
 	amount: z
-		.number()
-		.min(1, { message: "This field has to be filled." })
-		.max(999999999, { message: "Too expensive." }),
+		.string()
+		.trim()
+		.regex(
+			/^\d+(\.\d{1,2})?$/,
+			"Must be a positive number e.g. 4.90 or 7 or 5.4."
+		)
+		.refine((amount) => +amount <= 999999999, "Too expensive."),
 	currency: z.nativeEnum(Currency),
 	recaptchaToken: z.string(),
 });

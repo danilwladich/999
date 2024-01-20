@@ -122,6 +122,21 @@ export async function middleware(req: NextRequest) {
 		// If not authenticated and searched user not provided, redirect to the login page and store the original URL
 		return authRedirect(req);
 	}
+
+	const protectedPath = ["/adding"];
+
+	if (protectedPath.some((path) => req.nextUrl.pathname.startsWith(path))) {
+		// Checking authentication status
+		const authUser = await authValidation();
+
+		// If authenticated but searched user not provided, redirect to the auth user followings page
+		if (authUser) {
+			return NextResponse.next();
+		}
+
+		// If not authenticated and searched user not provided, redirect to the login page and store the original URL
+		return authRedirect(req);
+	}
 }
 
 // Configuration for the middleware, specifying the routes to apply the middleware to
@@ -131,6 +146,7 @@ export const config = {
 		"/profile/:path?",
 		"/followers/:path?",
 		"/followings/:path?",
+		"/adding",
 		"/api/auth/me",
 		"/api/user/:path*",
 		"/api/article/:path?",

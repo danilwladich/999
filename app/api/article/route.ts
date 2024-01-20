@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
 				userId: authUser.id,
 				title,
 				description,
-				amount,
+				amount: +amount,
 				currency,
 			},
 		});

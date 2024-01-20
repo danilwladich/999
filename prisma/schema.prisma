@@ -55,7 +55,7 @@ model Article {
   title       String
   description String?
   imagesUrl   ArticleImage[]
-  amount      Int
+  amount      Float
   currency    Currency       @default(USD)
 
   favorite FavoriteArticle[]

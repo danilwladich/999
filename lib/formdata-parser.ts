@@ -4,9 +4,10 @@ export function parseJsonFromFormData(formData: FormData): Object {
 	formData.forEach((data, name) => {
 		if (name.includes("[]")) {
 			json[name.split("[]")[0]] = formData.getAll(name);
-		} else {
-			json[name] = data;
+			return;
 		}
+
+		json[name] = data;
 	});
 
 	return json;

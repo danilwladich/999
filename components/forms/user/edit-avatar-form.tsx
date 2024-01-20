@@ -4,7 +4,10 @@ import axios, { AxiosError } from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { editAvatarSchema as formSchema } from "@/lib/form-schema";
+import {
+	ACCEPTED_IMAGE_TYPES,
+	editAvatarSchema as formSchema,
+} from "@/lib/form-schema";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthMe } from "@/hooks/use-auth-me";
@@ -127,10 +130,9 @@ export default function EditAvatarForm() {
 									}}
 									value=""
 									type="file"
-									accept="image/png, image/jpeg"
+									accept={ACCEPTED_IMAGE_TYPES.join(", ")}
 									disabled={isSubmitting}
 									className="hidden"
-									ref={field.ref}
 								/>
 							</FormControl>
 							<FormMessage />
