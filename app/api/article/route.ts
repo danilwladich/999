@@ -89,6 +89,8 @@ export async function POST(req: NextRequest) {
 				});
 			}
 		}
+
+		return jsonResponse(article.id, 201);
 	} catch (error) {
 		// Handling internal error
 		console.log("[ARTICLE_POST]", error);
