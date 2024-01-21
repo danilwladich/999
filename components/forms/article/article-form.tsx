@@ -198,7 +198,9 @@ export default function ArticleForm() {
 								</FormControl>
 								<SelectContent>
 									{Object.keys(Currency).map((currency) => (
-										<SelectItem value={currency}>{currency}</SelectItem>
+										<SelectItem key={currency} value={currency}>
+											{currency}
+										</SelectItem>
 									))}
 								</SelectContent>
 							</Select>
