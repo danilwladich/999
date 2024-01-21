@@ -41,7 +41,7 @@ export default async function Profile({
 
 	return (
 		<Card>
-			<CardContent className="p-2 md:p-6">
+			<CardContent>
 				<User {...user} />
 			</CardContent>
 		</Card>
