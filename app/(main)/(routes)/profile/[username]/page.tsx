@@ -40,7 +40,7 @@ export default async function Profile({
 	}
 
 	return (
-		<Card>
+		<Card className="pt-2 md:pt-0">
 			<CardContent>
 				<User {...user} />
 			</CardContent>
