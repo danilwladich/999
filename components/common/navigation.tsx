@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Mail, User, Settings } from "lucide-react";
+import { Home, Mail, User, Settings, PlusCircle } from "lucide-react";
 import { useAuthMe } from "@/hooks/use-auth-me";
 import { cn } from "@/lib/utils";
 
@@ -33,6 +33,12 @@ export function Navigation() {
 			name: "Messages",
 			icon: <Mail className="w-4 h-4" />,
 			isActive: pathname === "/messages",
+		},
+		{
+			path: "/adding",
+			name: "Adding",
+			icon: <PlusCircle className="w-4 h-4" />,
+			isActive: pathname === "/adding",
 		},
 		{
 			path: authUser ? `/profile/${authUser.username}` : "/auth",
