@@ -73,8 +73,8 @@ export async function POST(req: NextRequest) {
 			for (const [index, image] of images.entries()) {
 				// Reading and save the new avatar image
 				const imageBuffer = Buffer.from(await image.arrayBuffer());
-				const filename = `${index}_${Date.now()}_
-				${image.name.replaceAll(" ", "_")}`;
+				const imageName = image.name.replaceAll(" ", "_");
+				const filename = `${index}_${Date.now()}_${imageName}`;
 
 				await fs.writeFile(path.join(filepath, filename), imageBuffer);
 
