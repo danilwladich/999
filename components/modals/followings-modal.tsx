@@ -1,10 +1,10 @@
 "use client";
 
-import { Prisma } from "@prisma/client";
 import { useParams } from "next/navigation";
 import { useAuthMe } from "@/hooks/use-auth-me";
 import { useClientFetching } from "@/hooks/use-client-fetching";
 import User from "../routes/followers/user";
+import type { Prisma } from "@prisma/client";
 
 import {
 	DialogContent,

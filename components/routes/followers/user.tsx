@@ -1,7 +1,7 @@
 "use client";
 
-import { Prisma } from "@prisma/client";
 import UserActions from "./actions/actions";
+import type { Prisma } from "@prisma/client";
 
 import UserInfo from "./user-info";
 

@@ -1,7 +1,7 @@
-import { Prisma } from "@prisma/client";
 import UserInfo from "./user-info";
 import UserFollowers from "./user-followers";
 import UserActions from "./actions/actions";
+import type { Prisma } from "@prisma/client";
 
 type UserWithFollowers = Prisma.UserGetPayload<{
 	include: {

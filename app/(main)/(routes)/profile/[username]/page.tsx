@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
 import User from "@/components/routes/profile/user";
+import { Article } from "@/components/common/article";
 import type { Metadata } from "next";
 
 import { Card, CardContent } from "@/components/ui/card";
@@ -28,6 +29,14 @@ export default async function Profile({
 		include: {
 			followers: true,
 			followings: true,
+			articles: {
+				include: {
+					imagesUrl: true,
+				},
+				orderBy: {
+					createdAt: "desc",
+				},
+			},
 		},
 	});
 
@@ -40,10 +49,22 @@ export default async function Profile({
 	}
 
 	return (
-		<Card className="pt-2 md:pt-0">
-			<CardContent>
-				<User {...user} />
-			</CardContent>
-		</Card>
+		<div className="flex flex-col gap-4 pt-2 md:pt-0">
+			<Card>
+				<CardContent>
+					<User {...user} />
+				</CardContent>
+			</Card>
+
+			{user.articles.length > 0 && (
+				<Card>
+					<CardContent className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
+						{user.articles.map((a) => (
+							<Article key={a.id} {...a} />
+						))}
+					</CardContent>
+				</Card>
+			)}
+		</div>
 	);
 }
