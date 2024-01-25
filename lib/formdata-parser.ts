@@ -17,7 +17,7 @@ export function parseFormDataFromJson(json: { [k: string]: any }): FormData {
 	const formData = new FormData();
 
 	for (const key in json) {
-		if (typeof json[key] === "object") {
+		if (Array.isArray(json[key])) {
 			for (const item of json[key]) {
 				formData.append(key + "[]", item);
 			}
