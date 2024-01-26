@@ -57,25 +57,12 @@ export async function DELETE(req: NextRequest) {
 			return jsonResponse("User id required", 400);
 		}
 
-		const user = await db.user.findFirst({
-			where: {
-				id: userId,
-			},
-			include: {
-				followers: true,
-			},
-		});
-
-		if (!user) {
-			return jsonResponse("User doesn't exist", 400);
-		}
-
 		const authUser = getAuthUser(req);
 
 		const follow = await db.follow.findFirst({
 			where: {
 				whoFollowId: authUser.id,
-				whomFollowId: user.id,
+				whomFollowId: userId,
 			},
 		});
 
