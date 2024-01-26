@@ -26,6 +26,10 @@ export async function POST(req: NextRequest) {
 
 		const authUser = getAuthUser(req);
 
+		if (article.userId === authUser.id) {
+			return jsonResponse("Your own article can not be favorite", 400);
+		}
+
 		if (article.favorites.some((f) => f.userId === authUser.id)) {
 			return jsonResponse("This article already your favorite", 400);
 		}
