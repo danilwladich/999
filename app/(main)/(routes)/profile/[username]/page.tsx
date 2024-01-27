@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import User from "@/components/routes/profile/user";
-import { Article } from "@/components/common/article";
+import { Article } from "@/components/common/article/article";
 import type { Metadata } from "next";
 
 import { Card, CardContent } from "@/components/ui/card";
@@ -32,6 +32,7 @@ export default async function Profile({
 			articles: {
 				include: {
 					imagesUrl: true,
+					favorites: true,
 				},
 				orderBy: {
 					createdAt: "desc",

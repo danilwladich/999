@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { AuthProvider } from "@/components/providers/auth-provider";
 import { ModalProvider } from "@/components/providers/modal-provider";
+import { AlertDialogProvider } from "@/components/providers/alert-dialog-provider";
 import { Toaster } from "@/components/ui/sonner";
 
 const font = Inter({ subsets: ["latin"] });
@@ -27,6 +28,7 @@ export default function RootLayout({
 				<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
 					<AuthProvider>
 						<ModalProvider />
+						<AlertDialogProvider />
 						{children}
 						<Toaster />
 					</AuthProvider>

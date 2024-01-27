@@ -2,7 +2,7 @@
 
 import { useAuthMe } from "@/hooks/use-auth-me";
 import { useModalStore } from "@/hooks/use-modal-store";
-import ShareButton from "./share-button";
+import ShareButton from "@/components/common/share-button";
 import { useRouter } from "next/navigation";
 import type { Follow } from "@prisma/client";
 import FollowButton from "./follow-button";
@@ -53,7 +53,7 @@ export default function UserActions({
 				<DropdownMenuSeparator />
 
 				<DropdownMenuGroup>
-					<ShareButton username={username} />
+					<ShareButton url={`${window.location.origin}/profile/${username}`} />
 
 					{!isOwner && (
 						<>

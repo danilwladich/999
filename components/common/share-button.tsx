@@ -4,13 +4,11 @@ import { Share, Copy, CopyCheck } from "lucide-react";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { useState } from "react";
 
-export default function ShareButton({ username }: { username: string }) {
+export default function ShareButton({ url }: { url: string }) {
 	const [isCopied, setIsCopied] = useState(false);
 
 	// Checking if the browser supports the Web Share API
 	const isAbleToShare = !!navigator.share;
-
-	const url = `${window.location.origin}/profile/${username}`;
 
 	async function onShare(e: React.MouseEvent<HTMLDivElement>) {
 		e.preventDefault();

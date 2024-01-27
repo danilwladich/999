@@ -29,11 +29,19 @@ export default function ProfileLoader() {
 						<div key={`skeleton_article_${i}`} className="rounded-sm">
 							<Skeleton className="w-full h-0 pb-[100%] md:pb-[75%]" />
 
-							<Skeleton className="w-48 max-w-full h-5 mb-[2px] mt-[6px]" />
+							<div className="flex justify-between mt-[6px] gap-1">
+								<div className="w-48 max-w-full">
+									<Skeleton className="w-full h-5 mb-[2px]" />
 
-							<Skeleton className="w-14 h-5 my-1" />
+									<Skeleton className="w-14 h-5 my-1" />
 
-							<Skeleton className="w-24 h-5 mt-1 mb-[2px]" />
+									<Skeleton className="w-24 h-5 mt-1 mb-[2px]" />
+								</div>
+
+								<div className="w-10">
+									<Skeleton className="w-10 h-10" />
+								</div>
+							</div>
 						</div>
 					))}
 				</CardContent>

@@ -58,7 +58,7 @@ model Article {
   amount      Float
   currency    Currency       @default(USD)
 
-  favorite FavoriteArticle[]
+  favorites FavoriteArticle[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
