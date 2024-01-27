@@ -97,3 +97,61 @@ export async function POST(req: NextRequest) {
 		return jsonResponse("Internal Error", 500);
 	}
 }
+
+export async function DELETE(req: NextRequest) {
+	try {
+		const { articleId } = await req.json();
+
+		if (!articleId) {
+			return jsonResponse("Article id required", 400);
+		}
+
+		const authUser = getAuthUser(req);
+
+		// Find the article by id and user id
+		const article = await db.article.findFirst({
+			where: {
+				id: articleId,
+				userId: authUser.id,
+			},
+			include: {
+				imagesUrl: true,
+			},
+		});
+
+		if (!article) {
+			return jsonResponse("Article doesn't exist", 400);
+		}
+
+		// Delete associated images and article data
+		for (const { id } of article.imagesUrl) {
+			await db.articleImage.delete({
+				where: {
+					id,
+				},
+			});
+		}
+
+		// Removing article images dir
+		const filepath = path.join(
+			process.cwd(),
+			"public/images/articles",
+			articleId
+		);
+		await fs.rm(filepath, { recursive: true });
+
+		// Deleting article
+		await db.article.delete({
+			where: {
+				id: articleId,
+				userId: authUser.id,
+			},
+		});
+
+		return jsonResponse("Article deleted successfully", 200);
+	} catch (error) {
+		// Handling internal error
+		console.log("[ARTICLE_DELETE]", error);
+		return jsonResponse("Internal Error", 500);
+	}
+}
