@@ -16,12 +16,7 @@ export async function POST(req: NextRequest) {
 
 		// Handling validation errors
 		if (!body.success) {
-			return jsonResponse(
-				{
-					message: "Validation Error",
-				},
-				400
-			);
+			return jsonResponse("Validation Error", 400);
 		}
 
 		const { title, description, images, amount, currency, recaptchaToken } =
@@ -32,12 +27,7 @@ export async function POST(req: NextRequest) {
 
 		// Handling recaptcha verification failure
 		if (!isRecaptchaCorrect) {
-			return jsonResponse(
-				{
-					message: "Antibot system not passed",
-				},
-				400
-			);
+			return jsonResponse("Antibot system not passed", 400);
 		}
 
 		const authUser = getAuthUser(req);

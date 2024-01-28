@@ -16,12 +16,7 @@ export async function PATCH(req: NextRequest) {
 
 		// Handling validation errors
 		if (!body.success) {
-			return jsonResponse(
-				{
-					message: "Validation Error",
-				},
-				400
-			);
+			return jsonResponse("Validation Error", 400);
 		}
 
 		const { image } = body.data as { image: File };

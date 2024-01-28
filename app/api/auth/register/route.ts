@@ -13,12 +13,7 @@ export async function POST(req: NextRequest) {
 
 		// Handling validation errors
 		if (!body.success) {
-			return jsonResponse(
-				{
-					message: "Validation Error",
-				},
-				400
-			);
+			return jsonResponse("Validation Error", 400);
 		}
 
 		const { username, email, password, recaptchaToken } = body.data;
@@ -28,12 +23,7 @@ export async function POST(req: NextRequest) {
 
 		// Handling recaptcha verification failure
 		if (!isRecaptchaCorrect) {
-			return jsonResponse(
-				{
-					message: "Antibot system not passed",
-				},
-				400
-			);
+			return jsonResponse("Antibot system not passed", 400);
 		}
 
 		// Checking if a user with the provided email already exists

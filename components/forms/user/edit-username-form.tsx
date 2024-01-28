@@ -72,13 +72,14 @@ export default function EditUsernameForm() {
 			}
 
 			// Validation, recaptcha, or internal server error handler
-			if (!res.data.field || !res.data.message) {
-				setSubmitError(res.data.message || (res.data as unknown as string));
+			if (typeof res.data === "string") {
+				setSubmitError(res.data);
 				return;
 			}
 
-			// Setting form error for specific field
-			form.setError(res.data.field, { message: res.data.message });
+			// Setting form error for a specific field
+			const { field, message } = res.data;
+			form.setError(field, { message });
 		}
 	}
 

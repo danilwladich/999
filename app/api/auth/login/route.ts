@@ -13,12 +13,7 @@ export async function POST(req: NextRequest) {
 
 		// Handling validation errors
 		if (!body.success) {
-			return jsonResponse(
-				{
-					message: "Validation Error",
-				},
-				400
-			);
+			return jsonResponse("Validation Error", 400);
 		}
 
 		const { emailOrUsername, password, recaptchaToken } = body.data;
@@ -28,12 +23,7 @@ export async function POST(req: NextRequest) {
 
 		// Handling recaptcha verification failure
 		if (!isRecaptchaCorrect) {
-			return jsonResponse(
-				{
-					message: "Antibot system not passed",
-				},
-				400
-			);
+			return jsonResponse("Antibot system not passed", 400);
 		}
 
 		// Checking whether the provided identifier is an email or username
@@ -85,12 +75,6 @@ export async function POST(req: NextRequest) {
 	} catch (error) {
 		// Handling internal error
 		console.log("[LOGIN_POST]", error);
-		return jsonResponse(
-			{
-				field: "email",
-				message: "Internal Error",
-			},
-			500
-		);
+		return jsonResponse("Internal Error", 500);
 	}
 }
