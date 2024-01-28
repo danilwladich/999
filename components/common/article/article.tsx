@@ -1,8 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import ArticleActions from "./actions/actions";
-import { dateToShow } from "@/lib/date-to-show";
 import type { Prisma } from "@prisma/client";
+
+import { DateToShow } from "@/components/common/date-to-show";
 
 type Article = Prisma.ArticleGetPayload<{
 	include: {
@@ -15,8 +16,6 @@ export function Article(props: Article) {
 	const { id, title, imagesUrl, amount, currency, createdAt } = props;
 
 	const imageSrc = imagesUrl[0].imageUrl;
-
-	const date = dateToShow(createdAt);
 
 	return (
 		<article>
@@ -43,12 +42,10 @@ export function Article(props: Article) {
 						</div>
 
 						<div>
-							<time
-								dateTime={createdAt.toString()}
+							<DateToShow
+								date={createdAt}
 								className="opacity-50 text-xs md:text-sm"
-							>
-								{date}
-							</time>
+							/>
 						</div>
 					</div>
 
