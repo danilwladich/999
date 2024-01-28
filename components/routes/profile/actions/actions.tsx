@@ -53,7 +53,10 @@ export default function UserActions({
 				<DropdownMenuSeparator />
 
 				<DropdownMenuGroup>
-					<ShareButton url={`${window.location.origin}/profile/${username}`} />
+					<ShareButton
+						url={`/profile/${username}`}
+						text={`999 | ${username}`}
+					/>
 
 					{!isOwner && (
 						<>

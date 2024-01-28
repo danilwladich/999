@@ -4,7 +4,13 @@ import { Share, Copy, CopyCheck } from "lucide-react";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { useState } from "react";
 
-export default function ShareButton({ url }: { url: string }) {
+export default function ShareButton({
+	url,
+	text,
+}: {
+	url: string;
+	text: string;
+}) {
 	const [isCopied, setIsCopied] = useState(false);
 
 	// Checking if the browser supports the Web Share API
@@ -14,7 +20,10 @@ export default function ShareButton({ url }: { url: string }) {
 		e.preventDefault();
 
 		try {
-			await navigator.share({ url });
+			await navigator.share({
+				text,
+				url: window.location.origin + url,
+			});
 		} catch (err) {
 			console.log("Sharing failed:", err);
 		}
@@ -28,7 +37,7 @@ export default function ShareButton({ url }: { url: string }) {
 		}
 
 		try {
-			await navigator.clipboard.writeText(url);
+			await navigator.clipboard.writeText(window.location.origin + url);
 
 			setIsCopied(true);
 			setTimeout(() => setIsCopied(false), 1000);

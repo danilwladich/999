@@ -53,7 +53,7 @@ export default function ArticleActions({
 				<DropdownMenuSeparator />
 
 				<DropdownMenuGroup>
-					<ShareButton url={`/article/${id}`} />
+					<ShareButton url={`/article/${id}`} text={`999 | ${title}`} />
 
 					{!isOwner && (
 						<>
