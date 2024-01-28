@@ -31,7 +31,7 @@ export async function PATCH(req: NextRequest) {
 			"avatar"
 		);
 
-		// Create dir if not exists
+		// Create directory if it doesn't exist
 		try {
 			await fs.access(filepath);
 		} catch {

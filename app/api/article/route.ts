@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
 				article.id
 			);
 
-			// Create dir if not exists
+			// Create directory if it doesn't exist
 			try {
 				await fs.access(filepath);
 			} catch {
@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
 			}
 
 			for (const [index, image] of images.entries()) {
-				// Reading and save the new avatar image
+				// Reading and save the new article image
 				const imageBuffer = Buffer.from(await image.arrayBuffer());
 				const imageName = image.name.replaceAll(" ", "_");
 				const filename = `${index}_${Date.now()}_${imageName}`;
@@ -82,6 +82,111 @@ export async function POST(req: NextRequest) {
 	} catch (error) {
 		// Handling internal error
 		console.log("[ARTICLE_POST]", error);
+		return jsonResponse("Internal Error", 500);
+	}
+}
+
+export async function PATCH(req: NextRequest) {
+	try {
+		// Parsing and validating the request body
+		const data = parseJsonFromFormData(await req.formData());
+		const body = articleEditSchema.safeParse(data);
+
+		// Handling validation errors
+		if (!body.success) {
+			return jsonResponse("Validation Error", 400);
+		}
+
+		const { id, title, description, images, amount, currency } = body.data;
+
+		const authUser = getAuthUser(req);
+
+		// Check if the article exists with the provided ID and owner ID
+		const isArticleExist = !!(await db.article.findFirst({
+			where: {
+				id,
+				userId: authUser.id,
+			},
+		}));
+
+		if (!isArticleExist) {
+			return jsonResponse(
+				"Article with the provided id and owner id doesn't exist",
+				400
+			);
+		}
+
+		// Update existing article
+		const article = await db.article.update({
+			where: {
+				id,
+			},
+			data: {
+				userId: authUser.id,
+				title,
+				description,
+				amount: +amount,
+				currency,
+			},
+			include: {
+				imagesUrl: true,
+			},
+		});
+
+		// Removing article images dir
+		const filepath = path.join(
+			process.cwd(),
+			"public/images/articles",
+			article.id
+		);
+		await fs.rm(filepath, { recursive: true });
+
+		if (images?.length) {
+			// Create directory if it doesn't exist
+			try {
+				await fs.access(filepath);
+			} catch {
+				await fs.mkdir(filepath, { recursive: true });
+			}
+
+			for (const [index, image] of images.entries()) {
+				// Reading and save the new article image or update existing
+				const imageBuffer = Buffer.from(await image.arrayBuffer());
+				const imageName = image.name.replaceAll(" ", "_");
+				const filename = `${index}_${Date.now()}_${imageName}`;
+
+				await fs.writeFile(path.join(filepath, filename), imageBuffer);
+
+				// Setting the new imageUrl for the article
+				const imageUrl = path.join("/images/articles", article.id, filename);
+
+				// Update existing article image
+				if (index < article.imagesUrl.length) {
+					await db.articleImage.update({
+						where: {
+							id: article.imagesUrl[index].id,
+						},
+						data: {
+							imageUrl,
+						},
+					});
+					continue;
+				}
+
+				// Create new article image
+				await db.articleImage.create({
+					data: {
+						articleId: article.id,
+						imageUrl,
+					},
+				});
+			}
+		}
+
+		return jsonResponse(article.id, 201);
+	} catch (error) {
+		// Handling internal error
+		console.log("[ARTICLE_PATCH]", error);
 		return jsonResponse("Internal Error", 500);
 	}
 }
