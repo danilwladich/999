@@ -5,8 +5,8 @@ export function jsonResponse(data: any, status: number, init?: ResponseInit) {
 		...init,
 		status,
 		headers: {
-			...init?.headers,
 			"Content-Type": "application/json",
+			...init?.headers,
 		},
 	});
 }
