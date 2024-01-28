@@ -13,7 +13,15 @@ export const metadata: Metadata = {
 	title: "999 | marketplace",
 	description: "The best marketplace",
 	authors: [
-		{ name: "Daniel Wladyczeski", url: "https://github.com/danilwladich" },
+		{ name: "Daniel Władyczewski", url: "https://github.com/danilwladich" },
+	],
+	icons: [
+		{
+			rel: "icon",
+			url: "/icon?<generated>",
+			sizes: "32x32",
+			type: "image/png",
+		},
 	],
 };
 
