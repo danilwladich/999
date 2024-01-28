@@ -123,3 +123,42 @@ export const articleSchema = z.object({
 	currency: z.nativeEnum(Currency),
 	recaptchaToken: z.string(),
 });
+
+export const articleEditSchema = z.object({
+	id: z.string().min(1, { message: "Missing article id." }),
+	title: z
+		.string()
+		.trim()
+		.min(4, { message: "Title must be at least 4 characters." })
+		.max(40, { message: "Title must be less than 40 characters." }),
+	description: z
+		.string()
+		.trim()
+		.max(400, { message: "Description must be less than 400 characters." })
+		.optional(),
+	images: z
+		.any()
+		.refine(
+			(files?: File[]) =>
+				files?.length ? files.length <= MAX_FILES_COUNT : true,
+			`Maximum number of images must be at less than ${MAX_FILES_COUNT}.`
+		)
+		.refine(
+			(files?: File[]) => files?.every((file) => file.size <= MAX_FILE_SIZE),
+			`Max image size is ${MAX_FILE_SIZE_STRING}.`
+		)
+		.refine(
+			(files?: File[]) =>
+				files?.every((file) => ACCEPTED_IMAGE_TYPES.includes(file.type)),
+			`Only ${ACCEPTED_IMAGE_TYPES_STRING} formats are supported.`
+		),
+	amount: z
+		.string()
+		.trim()
+		.regex(
+			/^\d+(\.\d{1,2})?$/,
+			"Must be a positive number e.g. 4.90 or 7 or 5.4."
+		)
+		.refine((amount) => +amount <= 999999999, "Too expensive."),
+	currency: z.nativeEnum(Currency),
+});

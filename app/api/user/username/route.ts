@@ -14,7 +14,6 @@ export async function PATCH(req: NextRequest) {
 		if (!body.success) {
 			return jsonResponse(
 				{
-					field: "validation",
 					message: "Validation Error",
 				},
 				400

@@ -72,9 +72,8 @@ export default function EditUsernameForm() {
 			}
 
 			// Validation, recaptcha, or internal server error handler
-			const fields = ["validation", "internal"];
-			if (fields.includes(res.data.field)) {
-				setSubmitError(res.data.message);
+			if (!res.data.field || !res.data.message) {
+				setSubmitError(res.data.message || (res.data as unknown as string));
 				return;
 			}
 

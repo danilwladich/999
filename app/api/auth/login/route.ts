@@ -15,7 +15,6 @@ export async function POST(req: NextRequest) {
 		if (!body.success) {
 			return jsonResponse(
 				{
-					field: "validation",
 					message: "Validation Error",
 				},
 				400
@@ -31,7 +30,6 @@ export async function POST(req: NextRequest) {
 		if (!isRecaptchaCorrect) {
 			return jsonResponse(
 				{
-					field: "recaptchaToken",
 					message: "Antibot system not passed",
 				},
 				400
@@ -55,10 +53,8 @@ export async function POST(req: NextRequest) {
 		if (!user) {
 			return jsonResponse(
 				{
-					field: "emailOrUsername",
-					message: `User with this ${
-						itsEmail ? "email" : "username"
-					} doesn't exist`,
+					field: "password",
+					message: `Incorrect ${itsEmail ? "email" : "username"} or password`,
 				},
 				400
 			);
@@ -72,7 +68,7 @@ export async function POST(req: NextRequest) {
 			return jsonResponse(
 				{
 					field: "password",
-					message: "Incorrect password",
+					message: `Incorrect ${itsEmail ? "email" : "username"} or password`,
 				},
 				400
 			);

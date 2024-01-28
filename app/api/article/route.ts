@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import type { NextRequest } from "next/server";
-import { articleSchema } from "@/lib/form-schema";
+import { articleSchema, articleEditSchema } from "@/lib/form-schema";
 import { jsonResponse } from "@/lib/json-response";
 import { getAuthUser } from "@/lib/get-auth-user";
 import { parseJsonFromFormData } from "@/lib/formdata-parser";
@@ -18,7 +18,6 @@ export async function POST(req: NextRequest) {
 		if (!body.success) {
 			return jsonResponse(
 				{
-					field: "validation",
 					message: "Validation Error",
 				},
 				400
@@ -35,7 +34,6 @@ export async function POST(req: NextRequest) {
 		if (!isRecaptchaCorrect) {
 			return jsonResponse(
 				{
-					field: "recaptchaToken",
 					message: "Antibot system not passed",
 				},
 				400

@@ -15,7 +15,6 @@ export async function POST(req: NextRequest) {
 		if (!body.success) {
 			return jsonResponse(
 				{
-					field: "validation",
 					message: "Validation Error",
 				},
 				400
@@ -31,7 +30,6 @@ export async function POST(req: NextRequest) {
 		if (!isRecaptchaCorrect) {
 			return jsonResponse(
 				{
-					field: "recaptchaToken",
 					message: "Antibot system not passed",
 				},
 				400
@@ -98,12 +96,6 @@ export async function POST(req: NextRequest) {
 	} catch (error) {
 		// Handling internal error
 		console.log("[REGISTER_POST]", error);
-		return jsonResponse(
-			{
-				field: "internal",
-				message: "Internal Error",
-			},
-			500
-		);
+		return jsonResponse("Internal Error", 500);
 	}
 }
