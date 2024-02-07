@@ -14,6 +14,7 @@ interface ILink {
 	name: string;
 	icon: JSX.Element;
 	isActive: boolean;
+	authProtected: boolean;
 }
 
 export function Navigation() {
@@ -27,30 +28,35 @@ export function Navigation() {
 			name: "Home",
 			icon: <Home className="w-4 h-4" />,
 			isActive: pathname === "/",
+			authProtected: false,
 		},
 		{
 			path: "/messages",
 			name: "Messages",
 			icon: <Mail className="w-4 h-4" />,
 			isActive: pathname === "/messages",
+			authProtected: !authUser,
 		},
 		{
 			path: "/adding",
 			name: "Adding",
 			icon: <PlusCircle className="w-4 h-4" />,
 			isActive: pathname === "/adding",
+			authProtected: !authUser,
 		},
 		{
 			path: authUser ? `/profile/${authUser.username}` : "/auth",
 			name: authUser ? "Profile" : "Sing in",
 			icon: <User className="w-4 h-4" />,
 			isActive: pathname === `/profile/${authUser?.username}`,
+			authProtected: false,
 		},
 		{
 			path: "/settings",
 			name: "Settings",
 			icon: <Settings className="w-4 h-4" />,
 			isActive: pathname === "/settings",
+			authProtected: false,
 		},
 	];
 
@@ -73,12 +79,23 @@ function NavLink({
 	icon,
 	isActive,
 	isLastElement,
+	authProtected,
 }: ILink & { isLastElement: boolean }) {
 	return (
-		<Link href={path} className="flex items-center justify-between flex-1">
+		<Link
+			href={authProtected ? `/auth?from=${path}` : path}
+			className="flex items-center justify-between flex-1"
+		>
 			<div />
 
-			<Button variant="link" className={cn("gap-2", isActive && "underline")}>
+			<Button
+				variant="link"
+				className={cn(
+					"gap-2",
+					isActive && "underline",
+					authProtected && "opacity-50"
+				)}
+			>
 				{icon}
 
 				<p className="sr-only md:not-sr-only md:whitespace-nowrap">{name}</p>
