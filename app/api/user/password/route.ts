@@ -4,7 +4,7 @@ import { editPasswordSchema } from "@/lib/form-schema";
 import { getAuthUser } from "@/lib/get-auth-user";
 import bcrypt from "bcryptjs";
 import { db } from "@/lib/db";
-import cookie from "cookie";
+import { emptyJwt } from "@/lib/serialize-jwt";
 
 export async function PATCH(req: NextRequest) {
 	try {
@@ -54,13 +54,7 @@ export async function PATCH(req: NextRequest) {
 			},
 		});
 
-		const serialized = cookie.serialize("jwtToken", "", {
-			httpOnly: true,
-			secure: process.env.NODE_ENV === "production",
-			maxAge: -1,
-			sameSite: "strict",
-			path: "/",
-		});
+		const serialized = emptyJwt();
 
 		return jsonResponse("User password changed successfully", 200, {
 			headers: { "Set-Cookie": serialized },

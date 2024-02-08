@@ -27,3 +27,15 @@ export async function serializeJwt(user: UserWithoutPassword) {
 
 	return serialized;
 }
+
+export function emptyJwt() {
+	const serialized = cookie.serialize("jwtToken", "", {
+		httpOnly: true,
+		secure: process.env.NODE_ENV === "production",
+		maxAge: -1,
+		sameSite: "strict",
+		path: "/",
+	});
+
+	return serialized;
+}
