@@ -1,6 +1,10 @@
 import { create } from "zustand";
 
-export type ModalType = "edit username" | "edit avatar" | "edit article";
+export type ModalType =
+	| "edit username"
+	| "edit avatar"
+	| "edit article"
+	| "edit password";
 
 interface ModalStore {
 	type: ModalType | null;

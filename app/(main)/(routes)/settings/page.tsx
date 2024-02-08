@@ -4,6 +4,7 @@ import { ModeToggle } from "@/components/ui/mode-toggle";
 import { useAuthMe } from "@/hooks/use-auth-me";
 import StarsButton from "@/components/routes/settings/stars-button";
 import LogOutButton from "@/components/common/log-out-button";
+import ChangePasswordButton from "@/components/routes/settings/change-password-button";
 
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -43,6 +44,10 @@ export default function Settings() {
 								<CommandGroup heading="Profile">
 									<CommandItem>
 										<LogOutButton />
+									</CommandItem>
+
+									<CommandItem>
+										<ChangePasswordButton />
 									</CommandItem>
 								</CommandGroup>
 							</>
