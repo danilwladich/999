@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import { LogOut } from "lucide-react";
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
 export default function LogOutButton() {
 	const router = useRouter();
@@ -31,9 +30,10 @@ export default function LogOutButton() {
 	}
 
 	return (
-		<DropdownMenuItem onClick={onLogOut}>
-			<LogOut className="mr-2 h-4 w-4" />
-			<span>Log out</span>
-		</DropdownMenuItem>
+		<div className="flex gap-2 items-center w-full" onClick={onLogOut}>
+			<LogOut className="h-4 w-4" />
+
+			<span className="flex-1">Log out</span>
+		</div>
 	);
 }

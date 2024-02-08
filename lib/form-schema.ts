@@ -162,3 +162,33 @@ export const articleEditSchema = z.object({
 		.refine((amount) => +amount <= 999999999, "Too expensive."),
 	currency: z.nativeEnum(Currency),
 });
+
+export const editPasswordSchema = z
+	.object({
+		oldPassword: z.string().min(6, {
+			message: "Password must be at least 6 characters.",
+		}),
+		newPassword: z
+			.string()
+			.trim()
+			.min(6, {
+				message: "Password must be at least 6 characters.",
+			})
+			.regex(/[A-Z]/g, "Password must contain at least 1 uppercase letter.")
+			.regex(/[a-z]/g, "Password must contain at least 1 lowercase letter.")
+			.regex(/[0-9]/g, "Password must contain at least 1 digit.")
+			.refine((value) => !/\s/.test(value), {
+				message: "Password cannot contain whitespaces.",
+			}),
+		confirmNewPassword: z.string().trim().min(1, {
+			message: "This field has to be filled.",
+		}),
+	})
+	.refine(
+		// Additional refinement to check if passwords match in client
+		(data) => data.newPassword === data.confirmNewPassword,
+		{
+			message: "Passwords don't match.",
+			path: ["confirmNewPassword"],
+		}
+	);

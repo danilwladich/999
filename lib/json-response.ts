@@ -5,8 +5,7 @@ export function jsonResponse(
 	status: number,
 	init?: ResponseInit
 ) {
-	const responseData = typeof data == "string" ? data : JSON.stringify(data);
-	return new NextResponse(responseData, {
+	return new NextResponse(JSON.stringify(data), {
 		...init,
 		status,
 		headers: {

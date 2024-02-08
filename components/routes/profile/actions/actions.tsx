@@ -4,9 +4,9 @@ import { useAuthMe } from "@/hooks/use-auth-me";
 import { useModalStore } from "@/hooks/use-modal-store";
 import ShareButton from "@/components/common/share-button";
 import { useRouter } from "next/navigation";
-import type { Follow } from "@prisma/client";
 import FollowButton from "@/components/common/follow-button";
-import LogOutButton from "./log-out-button";
+import LogOutButton from "@/components/common/log-out-button";
+import type { Follow } from "@prisma/client";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -95,7 +95,9 @@ export default function UserActions({
 						<DropdownMenuSeparator />
 
 						<DropdownMenuGroup>
-							<LogOutButton />
+							<DropdownMenuItem>
+								<LogOutButton />
+							</DropdownMenuItem>
 						</DropdownMenuGroup>
 					</>
 				)}
