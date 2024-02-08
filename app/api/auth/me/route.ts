@@ -22,7 +22,7 @@ export function DELETE(req: NextRequest) {
 		path: "/",
 	});
 
-	return jsonResponse("User loged out successfully", 200, {
+	return jsonResponse("User logged out successfully", 200, {
 		headers: { "Set-Cookie": serialized },
 	});
 }
