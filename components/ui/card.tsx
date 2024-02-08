@@ -62,7 +62,7 @@ const CardContent = React.forwardRef<
 >(({ className, ...props }, ref) => (
 	<div
 		ref={ref}
-		className={cn("p-2 md:p-6 pt-0 md:first:pt-6", className)}
+		className={cn("p-2 md:p-6 pt-0 md:pt-0 md:first:pt-6", className)}
 		{...props}
 	/>
 ));

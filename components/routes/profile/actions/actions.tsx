@@ -5,7 +5,7 @@ import { useModalStore } from "@/hooks/use-modal-store";
 import ShareButton from "@/components/common/share-button";
 import { useRouter } from "next/navigation";
 import type { Follow } from "@prisma/client";
-import FollowButton from "./follow-button";
+import FollowButton from "@/components/common/follow-button";
 import LogOutButton from "./log-out-button";
 
 import { Button } from "@/components/ui/button";

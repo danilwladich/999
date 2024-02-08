@@ -1,9 +1,8 @@
 "use client";
 
-import { useModalStore } from "@/hooks/use-modal-store";
 import { MoreHorizontal, MessageCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
-import type { Follow } from "@prisma/client";
+import FollowButton from "@/components/common/follow-button";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -15,29 +14,17 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { FollowButton } from "./follow-button";
 
 export default function UserActions({
 	id,
 	username,
-	followers,
 	isFollowing,
-	mutateOnFollow,
 }: {
 	id: string;
 	username: string;
-	followers: Follow[];
 	isFollowing: boolean;
-	mutateOnFollow: () => void;
 }) {
-	const { onClose } = useModalStore();
-
 	const router = useRouter();
-
-	function onWriteMessage() {
-		onClose();
-		router.push(`/messages/${username}`);
-	}
 
 	return (
 		<DropdownMenu>
@@ -53,17 +40,14 @@ export default function UserActions({
 				<DropdownMenuSeparator />
 
 				<DropdownMenuGroup>
-					<DropdownMenuItem onClick={onWriteMessage}>
+					<DropdownMenuItem
+						onClick={() => router.push(`/messages/${username}`)}
+					>
 						<MessageCircle className="mr-2 h-4 w-4" />
 						<span>Write message</span>
 					</DropdownMenuItem>
 
-					<FollowButton
-						isFollowing={isFollowing}
-						id={id}
-						username={username}
-						mutateOnFollow={mutateOnFollow}
-					/>
+					<FollowButton isFollowing={isFollowing} id={id} username={username} />
 				</DropdownMenuGroup>
 			</DropdownMenuContent>
 		</DropdownMenu>

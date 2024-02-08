@@ -1,36 +1,30 @@
-"use client";
-
-import { useModalStore } from "@/hooks/use-modal-store";
-
-import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import type { Follow } from "@prisma/client";
 
+import { Button } from "@/components/ui/button";
+
 export default function UserFollowers({
+	username,
 	followers,
 	followings,
 }: {
+	username: string;
 	followers: Follow[];
 	followings: Follow[];
 }) {
-	const { onOpen } = useModalStore();
-
 	return (
 		<>
-			<Button
-				variant="outline"
-				className="flex-1"
-				onClick={() => onOpen("followers")}
-			>
-				Followers {followers.length}
-			</Button>
+			<Link href={`/followers/${username}`} className="flex-1">
+				<Button variant="outline" className="w-full">
+					Followers {followers.length}
+				</Button>
+			</Link>
 
-			<Button
-				variant="outline"
-				className="flex-1"
-				onClick={() => onOpen("followings")}
-			>
-				Followings {followings.length}
-			</Button>
+			<Link href={`/followings/${username}`} className="flex-1">
+				<Button variant="outline" className="w-full">
+					Followings {followings.length}
+				</Button>
+			</Link>
 		</>
 	);
 }

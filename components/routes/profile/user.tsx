@@ -22,7 +22,11 @@ export default function User({
 			<UserInfo username={username} imageUrl={imageUrl} />
 
 			<div className="flex gap-2 items-center w-full">
-				<UserFollowers followers={followers} followings={followings} />
+				<UserFollowers
+					username={username}
+					followers={followers}
+					followings={followings}
+				/>
 
 				<UserActions id={id} username={username} followers={followers} />
 			</div>

@@ -14,7 +14,7 @@ interface ILink {
 	name: string;
 	icon: JSX.Element;
 	isActive: boolean;
-	authProtected: boolean;
+	authProtected?: boolean;
 }
 
 export function Navigation() {
@@ -28,13 +28,12 @@ export function Navigation() {
 			name: "Home",
 			icon: <Home className="w-4 h-4" />,
 			isActive: pathname === "/",
-			authProtected: false,
 		},
 		{
-			path: "/messages",
-			name: "Messages",
+			path: "/chat",
+			name: "Chat",
 			icon: <Mail className="w-4 h-4" />,
-			isActive: pathname === "/messages",
+			isActive: pathname === "/chat",
 			authProtected: !authUser,
 		},
 		{
@@ -49,14 +48,12 @@ export function Navigation() {
 			name: authUser ? "Profile" : "Sing in",
 			icon: <User className="w-4 h-4" />,
 			isActive: pathname === `/profile/${authUser?.username}`,
-			authProtected: false,
 		},
 		{
 			path: "/settings",
 			name: "Settings",
 			icon: <Settings className="w-4 h-4" />,
 			isActive: pathname === "/settings",
-			authProtected: false,
 		},
 	];
 

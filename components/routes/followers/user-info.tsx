@@ -1,7 +1,4 @@
-"use client";
-
 import Link from "next/link";
-import { useModalStore } from "@/hooks/use-modal-store";
 import { useUserImageSrc } from "@/hooks/use-user-image-src";
 
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -13,20 +10,17 @@ export default function UserInfo({
 	username: string;
 	imageUrl: string;
 }) {
-	const { onClose } = useModalStore();
-
 	return (
 		<Link
-			onClick={onClose}
 			href={`/profile/${username}`}
-			className="flex gap-2 items-center flex-1"
+			className="flex gap-2 items-center flex-1 overflow-hidden"
 		>
-			<Avatar className="w-10 h-10">
+			<Avatar className="w-12 h-12">
 				<AvatarImage src={useUserImageSrc(imageUrl)} alt={username} />
 				<AvatarFallback>{username[0]}</AvatarFallback>
 			</Avatar>
 
-			<p className="text-sm font-semibold">{username}</p>
+			<p className="font-semibold truncate">{username}</p>
 		</Link>
 	);
 }
