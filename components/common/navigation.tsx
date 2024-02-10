@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Mail, User, Settings, PlusCircle } from "lucide-react";
-import { useAuthMe } from "@/hooks/use-auth-me";
+import { useAuthStore } from "@/hooks/use-auth-store";
 import { cn } from "@/lib/utils";
 
+import { Home, Mail, User, Settings, PlusCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
@@ -20,7 +20,7 @@ interface ILink {
 export function Navigation() {
 	const pathname = usePathname();
 
-	const { user: authUser } = useAuthMe();
+	const { user: authUser } = useAuthStore();
 
 	const links: ILink[] = [
 		{
@@ -81,21 +81,26 @@ function NavLink({
 	return (
 		<Link
 			href={authProtected ? `/auth?from=${path}` : path}
-			className="flex items-center justify-between flex-1"
+			className="flex items-center justify-between flex-1 group"
 		>
 			<div />
 
 			<Button
 				variant="link"
-				className={cn(
-					"gap-2",
-					isActive && "underline",
-					authProtected && "opacity-50"
-				)}
+				className={cn("gap-2", authProtected && "opacity-50")}
 			>
 				{icon}
 
-				<p className="sr-only md:not-sr-only md:whitespace-nowrap">{name}</p>
+				<span className="sr-only md:not-sr-only md:whitespace-nowrap md:relative">
+					{name}
+
+					{!authProtected && (
+						<div
+							className="absolute bottom-0 left-0 w-full h-[1px] bg-current
+							transition-opacity opacity-0 group-hover:opacity-100"
+						/>
+					)}
+				</span>
 			</Button>
 
 			{!isLastElement ? (
