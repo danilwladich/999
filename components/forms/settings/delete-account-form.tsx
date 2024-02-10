@@ -4,9 +4,10 @@ import axios, { AxiosError } from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { editPasswordSchema as formSchema } from "@/lib/form-schema";
+import { deleteAccountSchema as formSchema } from "@/lib/form-schema";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAuthMe } from "@/hooks/use-auth-me";
 import { useModalStore } from "@/hooks/use-modal-store";
 import { toast } from "sonner";
 import { ErrorResponse } from "@/types/ErrorResponse";
@@ -27,9 +28,8 @@ export default function EditPasswordForm() {
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			oldPassword: "",
-			newPassword: "",
-			confirmNewPassword: "",
+			password: "",
+			confirmPassword: "",
 		},
 	});
 
@@ -42,6 +42,7 @@ export default function EditPasswordForm() {
 	const router = useRouter();
 
 	const { onClose } = useModalStore();
+	const { setUser } = useAuthMe();
 
 	// Handler for form submission
 	async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -49,11 +50,13 @@ export default function EditPasswordForm() {
 		setSubmitError("");
 
 		try {
-			// Making a PATCH request to the user password API endpoint
-			await axios.patch("/api/user/password", values);
+			// Making a DELETE request to the user account API endpoint
+			await axios.delete("/api/user/account", { data: values });
 
 			// Close the modal
 			onClose();
+
+			setUser(null);
 
 			router.push("/auth");
 		} catch (e: unknown) {
@@ -65,7 +68,7 @@ export default function EditPasswordForm() {
 
 			// Handling non-response errors
 			if (!res) {
-				toast.error("Edit password error", { description: error.message });
+				toast.error("Delete account error", { description: error.message });
 				return;
 			}
 
@@ -89,15 +92,15 @@ export default function EditPasswordForm() {
 			>
 				<FormField
 					control={form.control}
-					name="oldPassword"
+					name="password"
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>Old password</FormLabel>
+							<FormLabel>Password</FormLabel>
 							<FormControl>
 								<Input
 									{...field}
 									type="password"
-									placeholder="Old password"
+									placeholder="Password"
 									disabled={isSubmitting}
 								/>
 							</FormControl>
@@ -108,36 +111,15 @@ export default function EditPasswordForm() {
 
 				<FormField
 					control={form.control}
-					name="newPassword"
+					name="confirmPassword"
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>New password</FormLabel>
+							<FormLabel>Confirm password</FormLabel>
 							<FormControl>
 								<Input
 									{...field}
 									type="password"
-									autoComplete="new-password"
-									placeholder="New password"
-									disabled={isSubmitting}
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-
-				<FormField
-					control={form.control}
-					name="confirmNewPassword"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Confirm new password</FormLabel>
-							<FormControl>
-								<Input
-									{...field}
-									type="password"
-									autoComplete="new-password"
-									placeholder="Confirm new password"
+									placeholder="Confirm password"
 									disabled={isSubmitting}
 								/>
 							</FormControl>
@@ -152,8 +134,8 @@ export default function EditPasswordForm() {
 					</p>
 				)}
 
-				<Button type="submit" disabled={isSubmitting}>
-					Save
+				<Button type="submit" variant="destructive" disabled={isSubmitting}>
+					Delete
 				</Button>
 			</form>
 		</Form>

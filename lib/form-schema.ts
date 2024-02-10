@@ -192,3 +192,21 @@ export const editPasswordSchema = z
 			path: ["confirmNewPassword"],
 		}
 	);
+
+export const deleteAccountSchema = z
+	.object({
+		password: z.string().min(6, {
+			message: "Password must be at least 6 characters.",
+		}),
+		confirmPassword: z.string().trim().min(1, {
+			message: "This field has to be filled.",
+		}),
+	})
+	.refine(
+		// Additional refinement to check if passwords match in client
+		(data) => data.password === data.confirmPassword,
+		{
+			message: "Passwords don't match.",
+			path: ["confirmPassword"],
+		}
+	);

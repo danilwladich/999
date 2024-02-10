@@ -4,7 +4,8 @@ export type ModalType =
 	| "edit username"
 	| "edit avatar"
 	| "edit article"
-	| "edit password";
+	| "edit password"
+	| "delete account";
 
 interface ModalStore {
 	type: ModalType | null;

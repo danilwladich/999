@@ -231,7 +231,10 @@ export async function DELETE(req: NextRequest) {
 			"public/images/articles",
 			articleId
 		);
-		await fs.rm(filepath, { recursive: true });
+		try {
+			await fs.access(filepath);
+			await fs.rm(filepath, { recursive: true });
+		} catch {}
 
 		// Deleting article
 		await db.article.delete({

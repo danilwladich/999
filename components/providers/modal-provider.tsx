@@ -4,6 +4,7 @@ import { useModalStore, ModalType } from "@/hooks/use-modal-store";
 import EditUsernameModal from "@/components/modals/edit-username-modal";
 import EditAvatarModal from "@/components/modals/edit-avatar-modal";
 import EditPasswordModal from "../modals/edit-password-modal";
+import DeleteAccountModal from "../modals/delete-account-modal";
 
 import { Dialog } from "@/components/ui/dialog";
 
@@ -12,6 +13,7 @@ const modalsMap: { [key in ModalType]: JSX.Element } = {
 	"edit avatar": <EditAvatarModal />,
 	"edit article": <></>, // TODO
 	"edit password": <EditPasswordModal />,
+	"delete account": <DeleteAccountModal />,
 };
 
 export function ModalProvider() {
