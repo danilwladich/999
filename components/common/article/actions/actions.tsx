@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuthMe } from "@/hooks/use-auth-me";
+import { useAuthStore } from "@/hooks/use-auth-store";
 import { useModalStore } from "@/hooks/use-modal-store";
 import ShareButton from "@/components/common/share-button";
 import { FavoriteButton } from "./favorite-button";
@@ -32,7 +32,7 @@ export default function ArticleActions({
 	userId,
 	favorites,
 }: Article) {
-	const { user: authUser } = useAuthMe();
+	const { user: authUser } = useAuthStore();
 	const { onOpen } = useModalStore();
 
 	const isOwner = userId === authUser?.id;

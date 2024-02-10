@@ -7,7 +7,7 @@ import * as z from "zod";
 import { editUsernameSchema as formSchema } from "@/lib/form-schema";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAuthMe } from "@/hooks/use-auth-me";
+import { useAuthStore } from "@/hooks/use-auth-store";
 import { useModalStore } from "@/hooks/use-modal-store";
 import { toast } from "sonner";
 import { ErrorResponse } from "@/types/ErrorResponse";
@@ -39,7 +39,7 @@ export default function EditUsernameForm() {
 	const isSubmitting = form.formState.isSubmitting;
 
 	const router = useRouter();
-	const { user: authUser, setUser } = useAuthMe();
+	const { user: authUser, setUser } = useAuthStore();
 	const { onClose } = useModalStore();
 
 	// Handler for form submission

@@ -1,7 +1,7 @@
 "use client";
 
 import { ModeToggle } from "@/components/ui/mode-toggle";
-import { useAuthMe } from "@/hooks/use-auth-me";
+import { useAuthStore } from "@/hooks/use-auth-store";
 import StarsButton from "@/components/routes/settings/stars-button";
 import LogOutButton from "@/components/common/log-out-button";
 import ChangePasswordButton from "@/components/routes/settings/change-password-button";
@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/command";
 
 export default function Settings() {
-	const { user: authUser } = useAuthMe();
+	const { user: authUser } = useAuthStore();
 
 	return (
 		<Card className="md:w-[500px] md:mx-auto">

@@ -1,7 +1,7 @@
 "use client";
 
 import UserActions from "./actions/actions";
-import { useAuthMe } from "@/hooks/use-auth-me";
+import { useAuthStore } from "@/hooks/use-auth-store";
 import type { Prisma } from "@prisma/client";
 
 import UserInfo from "./user-info";
@@ -15,7 +15,7 @@ type UserWithFollowers = Prisma.UserGetPayload<{
 export default function User({ user }: { user: UserWithFollowers }) {
 	const { id, username, imageUrl, followers } = user;
 
-	const { user: authUser } = useAuthMe();
+	const { user: authUser } = useAuthStore();
 
 	const isFollowing = followers.some((f) => f.whoFollowId === authUser?.id);
 

@@ -10,7 +10,7 @@ import {
 } from "@/lib/form-schema";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAuthMe } from "@/hooks/use-auth-me";
+import { useAuthStore } from "@/hooks/use-auth-store";
 import { useUserImageSrc } from "@/hooks/use-user-image-src";
 import { toast } from "sonner";
 import { useModalStore } from "@/hooks/use-modal-store";
@@ -47,7 +47,7 @@ export default function EditAvatarForm() {
 	const isSubmitting = form.formState.isSubmitting;
 
 	const router = useRouter();
-	const { user: authUser, setUser } = useAuthMe();
+	const { user: authUser, setUser } = useAuthStore();
 	const { onClose } = useModalStore();
 
 	const defaultImageSrc = useUserImageSrc(authUser?.imageUrl);

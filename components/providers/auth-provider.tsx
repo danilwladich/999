@@ -2,15 +2,15 @@
 
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
+import { useAuthStore } from "@/hooks/use-auth-store";
 
 import { AppLoader } from "@/components/ui/app-loader";
-import { useAuthMe } from "@/hooks/use-auth-me";
+import { toast } from "sonner";
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
 	const [isLoading, setIsLoading] = useState(true);
 
-	const { setUser } = useAuthMe();
+	const { setUser } = useAuthStore();
 
 	// useEffect to handle the authentication process
 	useEffect(() => {
@@ -26,6 +26,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 			} catch (e: unknown) {
 				// Handling AxiosError
 				const error = e as AxiosError;
+
+				setUser(null);
 
 				// Handling non-response errors
 				if (!error.response) {
@@ -49,3 +51,5 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 	// Rendering children components once authentication is complete
 	return children;
 }
+
+

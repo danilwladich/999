@@ -7,7 +7,7 @@ import * as z from "zod";
 import { deleteAccountSchema as formSchema } from "@/lib/form-schema";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAuthMe } from "@/hooks/use-auth-me";
+import { useAuthStore } from "@/hooks/use-auth-store";
 import { useModalStore } from "@/hooks/use-modal-store";
 import { toast } from "sonner";
 import { ErrorResponse } from "@/types/ErrorResponse";
@@ -42,7 +42,7 @@ export default function EditPasswordForm() {
 	const router = useRouter();
 
 	const { onClose } = useModalStore();
-	const { setUser } = useAuthMe();
+	const { setUser } = useAuthStore();
 
 	// Handler for form submission
 	async function onSubmit(values: z.infer<typeof formSchema>) {

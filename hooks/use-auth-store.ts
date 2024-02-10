@@ -8,7 +8,7 @@ interface AuthStore {
 	setUser: (user: UserType) => void;
 }
 
-export const useAuthMe = create<AuthStore>((set) => ({
+export const useAuthStore = create<AuthStore>((set) => ({
 	user: null,
 	setUser: (user) => set({ user }),
 }));

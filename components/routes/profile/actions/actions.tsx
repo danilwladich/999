@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuthMe } from "@/hooks/use-auth-me";
+import { useAuthStore } from "@/hooks/use-auth-store";
 import { useModalStore } from "@/hooks/use-modal-store";
 import ShareButton from "@/components/common/share-button";
 import { useRouter } from "next/navigation";
@@ -29,7 +29,7 @@ export default function UserActions({
 	username: string;
 	followers: Follow[];
 }) {
-	const { user: authUser } = useAuthMe();
+	const { user: authUser } = useAuthStore();
 	const { onOpen } = useModalStore();
 	const router = useRouter();
 
