@@ -5,10 +5,12 @@ type UserType = UserWithoutPassword | null;
 
 interface AuthStore {
 	user: UserType;
+	isChecked: boolean;
 	setUser: (user: UserType) => void;
 }
 
 export const useAuthStore = create<AuthStore>((set) => ({
 	user: null,
-	setUser: (user) => set({ user }),
+	isChecked: false,
+	setUser: (user) => set({ user, isChecked: true }),
 }));

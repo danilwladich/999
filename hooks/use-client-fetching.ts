@@ -11,7 +11,7 @@ export function useClientFetching<Data>(
 		if (!res.ok) {
 			const errorText = await res.text();
 
-			throw new Error(`Error: ${errorText}`);
+			throw new Error(errorText);
 		}
 
 		const json = (await res.json()) as Data;
