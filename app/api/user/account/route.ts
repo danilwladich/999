@@ -22,6 +22,7 @@ export async function DELETE(req: NextRequest) {
 
 		const authUser = getAuthUser(req);
 
+		// Find auth user by id
 		const user = await db.user.findFirst({
 			where: {
 				id: authUser.id,
@@ -107,7 +108,7 @@ export async function DELETE(req: NextRequest) {
 			},
 		});
 
-		// Delete user
+		// Delete the user
 		await db.user.delete({
 			where: {
 				id: authUser.id,

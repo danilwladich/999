@@ -103,7 +103,7 @@ export default function ImagesField({
 
 						<div className="absolute w-full h-full top-0 left-0 flex flex-col justify-center items-center gap-2">
 							<ImagePlus className="w-8 h-8" />
-							<p>Select image</p>
+							<span>Select image</span>
 						</div>
 					</div>
 				))}

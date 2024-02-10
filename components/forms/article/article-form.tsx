@@ -39,7 +39,7 @@ export default function ArticleForm() {
 		defaultValues: {
 			title: "",
 			description: "",
-			images: undefined,
+			images: [],
 			amount: "",
 			currency: "USD",
 			recaptchaToken: "",

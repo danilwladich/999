@@ -101,15 +101,20 @@ export const articleSchema = z.object({
 		.refine(
 			(files?: File[]) =>
 				files?.length ? files.length <= MAX_FILES_COUNT : true,
-			`Maximum number of images must be at less than ${MAX_FILES_COUNT}.`
+			`Maximum number of images must be less than ${MAX_FILES_COUNT}.`
 		)
 		.refine(
-			(files?: File[]) => files?.every((file) => file.size <= MAX_FILE_SIZE),
+			(files?: File[]) =>
+				files?.length
+					? files.every((file) => file.size <= MAX_FILE_SIZE)
+					: true,
 			`Max image size is ${MAX_FILE_SIZE_STRING}.`
 		)
 		.refine(
 			(files?: File[]) =>
-				files?.every((file) => ACCEPTED_IMAGE_TYPES.includes(file.type)),
+				files?.length
+					? files.every((file) => ACCEPTED_IMAGE_TYPES.includes(file.type))
+					: true,
 			`Only ${ACCEPTED_IMAGE_TYPES_STRING} formats are supported.`
 		),
 	amount: z
@@ -141,15 +146,20 @@ export const articleEditSchema = z.object({
 		.refine(
 			(files?: File[]) =>
 				files?.length ? files.length <= MAX_FILES_COUNT : true,
-			`Maximum number of images must be at less than ${MAX_FILES_COUNT}.`
+			`Maximum number of images must be less than ${MAX_FILES_COUNT}.`
 		)
 		.refine(
-			(files?: File[]) => files?.every((file) => file.size <= MAX_FILE_SIZE),
+			(files?: File[]) =>
+				files?.length
+					? files.every((file) => file.size <= MAX_FILE_SIZE)
+					: true,
 			`Max image size is ${MAX_FILE_SIZE_STRING}.`
 		)
 		.refine(
 			(files?: File[]) =>
-				files?.every((file) => ACCEPTED_IMAGE_TYPES.includes(file.type)),
+				files?.length
+					? files.every((file) => ACCEPTED_IMAGE_TYPES.includes(file.type))
+					: true,
 			`Only ${ACCEPTED_IMAGE_TYPES_STRING} formats are supported.`
 		),
 	amount: z
