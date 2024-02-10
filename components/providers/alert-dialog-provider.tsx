@@ -4,7 +4,7 @@ import {
 	useAlertDialogStore,
 	AlertDialogType,
 } from "@/hooks/use-alert-dialog-store";
-import DeleteArticleAlertDialog from "../alert-dialogs/delete-article-alert-dialog";
+import DeleteArticleAlertDialog from "@/components/alert-dialogs/delete-article-alert-dialog";
 
 import { AlertDialog } from "@/components/ui/alert-dialog";
 

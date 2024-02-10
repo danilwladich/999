@@ -27,7 +27,7 @@ export default function DeleteArticleAlertDialog() {
 			<AlertDialogFooter>
 				<AlertDialogCancel>Cancel</AlertDialogCancel>
 
-				<AlertDialogAction onClick={onContinue}>Continue</AlertDialogAction>
+				<AlertDialogAction onClick={onContinue!}>Continue</AlertDialogAction>
 			</AlertDialogFooter>
 		</AlertDialogContent>
 	);
