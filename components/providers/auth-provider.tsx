@@ -24,7 +24,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 	}, [data, error]);
 
 	// First fetching loader
-	if (isLoading && !isChecked) {
+	if (isLoading || !isChecked) {
 		return <AppLoader />;
 	}
 
