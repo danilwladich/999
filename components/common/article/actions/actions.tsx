@@ -5,6 +5,7 @@ import { useModalStore } from "@/hooks/use-modal-store";
 import ShareButton from "@/components/common/share-button";
 import { FavoriteButton } from "./favorite-button";
 import { DeleteButton } from "./delete-button";
+import { getAppTitle } from "@/lib/get-app-title";
 import type { Prisma } from "@prisma/client";
 
 import { Button } from "@/components/ui/button";
@@ -53,7 +54,7 @@ export default function ArticleActions({
 				<DropdownMenuSeparator />
 
 				<DropdownMenuGroup>
-					<ShareButton url={`/article/${id}`} text={`999 | ${title}`} />
+					<ShareButton url={`/article/${id}`} text={getAppTitle(title)} />
 
 					{!isOwner && (
 						<>

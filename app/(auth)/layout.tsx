@@ -1,7 +1,8 @@
+import { getAppTitle } from "@/lib/get-app-title";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-	title: "999 | auth",
+	title: getAppTitle("auth"),
 	description:
 		"Login to your existing account or create free account now and join our community",
 };

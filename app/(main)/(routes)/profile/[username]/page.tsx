@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import User from "@/components/routes/profile/user";
 import { Article } from "@/components/common/article/article";
+import { getAppTitle } from "@/lib/get-app-title";
 import type { Metadata } from "next";
 
 import { Card, CardContent } from "@/components/ui/card";
@@ -13,7 +14,7 @@ export async function generateMetadata({
 	const username = params.username;
 
 	return {
-		title: `999 | ${username}`,
+		title: getAppTitle(username),
 	};
 }
 

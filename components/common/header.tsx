@@ -1,5 +1,6 @@
 import { Navigation } from "@/components/common/navigation";
 import { Separator } from "@/components/ui/separator";
+import { getAppTitle } from "@/lib/get-app-title";
 
 export function Header() {
 	return (
@@ -11,7 +12,7 @@ export function Header() {
 		>
 			<div className="pl-[calc(100vw-100%)]">
 				<div className="flex items-center justify-between container">
-					<h1 className="text-lg">999 | marketplace</h1>
+					<h1 className="text-lg">{getAppTitle()}</h1>
 
 					<Navigation />
 				</div>

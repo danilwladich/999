@@ -6,6 +6,7 @@ import ShareButton from "@/components/common/share-button";
 import { useRouter } from "next/navigation";
 import FollowButton from "@/components/common/follow-button";
 import LogOutButton from "@/components/common/log-out-button";
+import { getAppTitle } from "@/lib/get-app-title";
 import type { Follow } from "@prisma/client";
 
 import { Button } from "@/components/ui/button";
@@ -55,7 +56,7 @@ export default function UserActions({
 				<DropdownMenuGroup>
 					<ShareButton
 						url={`/profile/${username}`}
-						text={`999 | ${username}`}
+						text={getAppTitle(username)}
 					/>
 
 					{!isOwner && (

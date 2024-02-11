@@ -6,11 +6,12 @@ import { AuthProvider } from "@/components/providers/auth-provider";
 import { ModalProvider } from "@/components/providers/modal-provider";
 import { AlertDialogProvider } from "@/components/providers/alert-dialog-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { getAppTitle } from "@/lib/get-app-title";
 
 const font = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-	title: "999 | marketplace",
+	title: getAppTitle(),
 	description: "The best marketplace",
 	authors: [
 		{ name: "Daniel Władyczewski", url: "https://github.com/danilwladich" },
