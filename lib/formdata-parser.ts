@@ -1,5 +1,5 @@
 export function parseJsonFromFormData(formData: FormData): Object {
-	const json: any = {};
+	const json: { [k: string]: any } = {};
 
 	formData.forEach((data, name) => {
 		if (name.includes("[]")) {
