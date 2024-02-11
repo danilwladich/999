@@ -11,7 +11,9 @@ export function Footer() {
 		>
 			<Separator />
 
-			<Navigation />
+			<div className="mr-[var(--removed-body-scroll-bar-size)]">
+				<Navigation />
+			</div>
 		</footer>
 	);
 }
