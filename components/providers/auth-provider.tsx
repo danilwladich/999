@@ -21,7 +21,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 		} else {
 			setUser(null);
 		}
-	}, [data, error]);
+	}, [data, error, setUser]);
 
 	// First fetching loader
 	if (isLoading || !isChecked) {

@@ -13,7 +13,7 @@ export default function EditPasswordModal() {
 			<DialogHeader>
 				<DialogTitle>Edit password</DialogTitle>
 				<DialogDescription>
-					Change your password. After saving, you'll be logged out
+					Change your password. After saving, you&#39ll be logged out
 				</DialogDescription>
 			</DialogHeader>
 
