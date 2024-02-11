@@ -10,9 +10,11 @@ export default function MainLayout({
 		<>
 			<Header />
 
-			<main className="pt-2 md:pt-16 pb-16 md:pb-2 px-2 md:container">
-				{children}
-			</main>
+			<div className="pl-[calc(100vw-100%)]">
+				<main className="pt-2 md:pt-16 pb-16 md:pb-2 px-2 md:container">
+					{children}
+				</main>
+			</div>
 
 			<Footer />
 		</>

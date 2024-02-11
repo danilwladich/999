@@ -9,7 +9,7 @@ export function Header() {
 				bg-[rgba(255,255,255,0.75)] dark:bg-[rgba(0,0,0,0.75)] 
 				backdrop-blur-sm overflow-hidden z-50"
 		>
-			<div className="mr-[var(--removed-body-scroll-bar-size)]">
+			<div className="pl-[calc(100vw-100%)]">
 				<div className="flex items-center justify-between container">
 					<h1 className="text-lg">999 | marketplace</h1>
 
