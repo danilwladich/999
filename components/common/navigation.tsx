@@ -86,8 +86,10 @@ function NavLink({
 			<div />
 
 			<Button
+				disabled={authProtected}
+				tabIndex={-1}
 				variant="link"
-				className={cn("gap-2", authProtected && "opacity-50")}
+				className="gap-2"
 			>
 				{icon}
 
@@ -96,8 +98,10 @@ function NavLink({
 
 					{!authProtected && (
 						<div
-							className="absolute bottom-0 left-0 w-full h-[1px] bg-current
-							transition-opacity opacity-0 group-hover:opacity-100"
+							className={cn(
+								"absolute bottom-0 left-0 w-full h-[1px] bg-current transition-opacity opacity-0 group-hover:opacity-100",
+								isActive && "opacity-100"
+							)}
 						/>
 					)}
 				</span>
