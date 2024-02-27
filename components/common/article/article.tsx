@@ -16,15 +16,15 @@ type Article = Prisma.ArticleGetPayload<{
 export function Article(props: Article) {
 	const { id, title, images, amount, currency, createdAt } = props;
 
-	const imageSrc = images[0]?.imageUrl as string | undefined;
+	const imageUrl = images[0]?.imageUrl as string | undefined;
 
 	return (
 		<article>
 			<Link href={`/article/${id}`} className="group">
 				<div className="h-0 pb-[100%] md:pb-[75%] relative rounded-t-sm overflow-hidden">
-					{!!imageSrc ? (
+					{!!imageUrl ? (
 						<Image
-							src={imageSrc}
+							src={imageUrl}
 							alt={title}
 							width={320}
 							height={320}

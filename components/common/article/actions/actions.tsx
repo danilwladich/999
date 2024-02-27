@@ -2,7 +2,7 @@
 
 import { useAuthStore } from "@/hooks/use-auth-store";
 import { useModalStore } from "@/hooks/use-modal-store";
-import ShareButton from "@/components/common/share-button";
+import ShareButton from "@/components/common/buttons/share-button";
 import { FavoriteButton } from "./favorite-button";
 import { DeleteButton } from "./delete-button";
 import { getAppTitle } from "@/lib/get-app-title";

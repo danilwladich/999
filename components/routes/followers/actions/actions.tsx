@@ -2,7 +2,7 @@
 
 import { MoreHorizontal, MessageCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
-import FollowButton from "@/components/common/follow-button";
+import FollowButton from "@/components/common/buttons/follow-button";
 
 import { Button } from "@/components/ui/button";
 import {

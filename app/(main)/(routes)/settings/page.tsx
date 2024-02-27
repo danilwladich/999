@@ -3,7 +3,7 @@
 import { ModeToggle } from "@/components/ui/mode-toggle";
 import { useAuthStore } from "@/hooks/use-auth-store";
 import StarsButton from "@/components/routes/settings/stars-button";
-import LogOutButton from "@/components/common/log-out-button";
+import LogOutButton from "@/components/common/buttons/log-out-button";
 import ChangePasswordButton from "@/components/routes/settings/change-password-button";
 import DeleteAccountButton from "@/components/routes/settings/delete-account-button";
 

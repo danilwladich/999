@@ -2,10 +2,10 @@
 
 import { useAuthStore } from "@/hooks/use-auth-store";
 import { useModalStore } from "@/hooks/use-modal-store";
-import ShareButton from "@/components/common/share-button";
+import ShareButton from "@/components/common/buttons/share-button";
 import { useRouter } from "next/navigation";
-import FollowButton from "@/components/common/follow-button";
-import LogOutButton from "@/components/common/log-out-button";
+import FollowButton from "@/components/common/buttons/follow-button";
+import LogOutButton from "@/components/common/buttons/log-out-button";
 import { getAppTitle } from "@/lib/get-app-title";
 import type { Follow } from "@prisma/client";
 
