@@ -15,6 +15,9 @@ export async function generateMetadata({
 		where: {
 			username: params.username,
 		},
+		select: {
+			username: true,
+		},
 	});
 
 	return {
@@ -36,7 +39,7 @@ export default async function Profile({
 			followings: true,
 			articles: {
 				include: {
-					imagesUrl: true,
+					images: true,
 					favorites: true,
 				},
 				orderBy: {

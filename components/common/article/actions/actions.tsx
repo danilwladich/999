@@ -22,7 +22,6 @@ import { MoreHorizontal, Pencil } from "lucide-react";
 
 type Article = Prisma.ArticleGetPayload<{
 	include: {
-		imagesUrl: true;
 		favorites: true;
 	};
 }>;

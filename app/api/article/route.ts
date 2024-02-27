@@ -129,7 +129,7 @@ export async function PATCH(req: NextRequest) {
 				currency,
 			},
 			include: {
-				imagesUrl: true,
+				images: true,
 			},
 		});
 
@@ -161,10 +161,10 @@ export async function PATCH(req: NextRequest) {
 				const imageUrl = path.join("/images/articles", article.id, filename);
 
 				// Update existing article image
-				if (index < article.imagesUrl.length) {
+				if (index < article.images.length) {
 					await db.articleImage.update({
 						where: {
-							id: article.imagesUrl[index].id,
+							id: article.images[index].id,
 						},
 						data: {
 							imageUrl,
@@ -208,7 +208,7 @@ export async function DELETE(req: NextRequest) {
 				userId: authUser.id,
 			},
 			include: {
-				imagesUrl: true,
+				images: true,
 			},
 		});
 
@@ -217,7 +217,7 @@ export async function DELETE(req: NextRequest) {
 		}
 
 		// Delete associated images and article data
-		for (const { id } of article.imagesUrl) {
+		for (const { id } of article.images) {
 			await db.articleImage.delete({
 				where: {
 					id,

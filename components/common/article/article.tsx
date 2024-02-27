@@ -8,15 +8,15 @@ import { ImageOff } from "lucide-react";
 
 type Article = Prisma.ArticleGetPayload<{
 	include: {
-		imagesUrl: true;
+		images: true;
 		favorites: true;
 	};
 }>;
 
 export function Article(props: Article) {
-	const { id, title, imagesUrl, amount, currency, createdAt } = props;
+	const { id, title, images, amount, currency, createdAt } = props;
 
-	const imageSrc = imagesUrl[0]?.imageUrl as string | undefined;
+	const imageSrc = images[0]?.imageUrl as string | undefined;
 
 	return (
 		<article>

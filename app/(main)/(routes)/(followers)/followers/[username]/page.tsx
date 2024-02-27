@@ -21,6 +21,9 @@ export async function generateMetadata({
 		where: {
 			username: params.username,
 		},
+		select: {
+			username: true,
+		},
 	});
 
 	return {
