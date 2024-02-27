@@ -15,13 +15,13 @@ export default function UserFollowers({
 	return (
 		<>
 			<Link href={`/followers/${username}`} className="flex-1">
-				<Button variant="outline" className="w-full">
+				<Button tabIndex={-1} variant="outline" className="w-full">
 					Followers {followers.length}
 				</Button>
 			</Link>
 
 			<Link href={`/followings/${username}`} className="flex-1">
-				<Button variant="outline" className="w-full">
+				<Button tabIndex={-1} variant="outline" className="w-full">
 					Followings {followings.length}
 				</Button>
 			</Link>
