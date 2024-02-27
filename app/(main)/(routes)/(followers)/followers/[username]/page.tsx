@@ -1,6 +1,8 @@
 import { db } from "@/lib/db";
 import Link from "next/link";
 import User from "@/components/routes/followers/user";
+import type { Metadata } from "next";
+import { getAppTitle } from "@/lib/get-app-title";
 
 import {
 	Card,
@@ -9,6 +11,22 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+
+export async function generateMetadata({
+	params,
+}: {
+	params: { username: string };
+}): Promise<Metadata> {
+	const user = await db.user.findFirst({
+		where: {
+			username: params.username,
+		},
+	});
+
+	return {
+		title: getAppTitle(user ? `${user?.username} followers` : "User not found"),
+	};
+}
 
 export default async function Followers({
 	params,

@@ -11,10 +11,14 @@ export async function generateMetadata({
 }: {
 	params: { username: string };
 }): Promise<Metadata> {
-	const username = params.username;
+	const user = await db.user.findFirst({
+		where: {
+			username: params.username,
+		},
+	});
 
 	return {
-		title: getAppTitle(username),
+		title: getAppTitle(user?.username || "User not found"),
 	};
 }
 
